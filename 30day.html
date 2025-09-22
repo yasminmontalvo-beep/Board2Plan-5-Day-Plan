@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Board2Plan — 30‑Day Marketing Plan</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+<h1>Board2Plan — 30‑Day Marketing Plan</h1>
+<p>Set your details and download your paid 30‑day workbook.</p>
+<label>Brand <input id="brand" value="Board2Plan"></label><br>
+<label>Goal <input id="goal" value="Lead Generation"></label><br>
+<label>Business Type <input id="business" value="General"></label><br>
+<label>File Name <input id="file" value="30Day_Marketing_Plan.xlsx"></label><br>
+<button id="download">⬇️ Download 30‑Day Excel</button>
+<script>
+const byId=id=>document.getElementById(id);
+function buildPlanSheet(){const rows=Array.from({length:30},(_,i)=>({Day:i+1,Task:"Content Task"}));return XLSX.utils.json_to_sheet(rows);}
+document.getElementById('download').addEventListener('click',()=>{
+  const fname=byId('file').value.trim()||'30Day_Marketing_Plan.xlsx';
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,buildPlanSheet(),'30 Day Plan');
+  XLSX.writeFile(wb,fname);
+});
+</script>
+</body>
+</html>

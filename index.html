@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Board2Plan – 5-Day Trial Marketing Plan</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <style>
+    :root { --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --ring:#bae6fd; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:#f8fafc; color:var(--ink); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 28px; }
+    h1 { font-size: 28px; margin: 6px 0 16px; }
+    p.lead { color: var(--muted); margin: 0 0 16px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; box-shadow:0 2px 8px rgba(2,6,23,.04); }
+    .card-body { padding:18px; display:grid; gap:16px; grid-template-columns: 1fr 1fr; }
+    label { font-size:13px; }
+    .input, select {
+      width:100%; height:42px; padding:0 10px; border:1px solid #cbd5e1; border-radius:10px; font-size:14px; background:#fff; color:var(--ink);
+    }
+    .input:focus, select:focus { outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--ring); }
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px; height:46px; padding:0 18px;
+      border-radius:9999px; border:0; font-weight:700; cursor:pointer; font-size:15px;
+    }
+    .btn-primary { background:var(--brand); color:#fff; }
+    .btn-outline { background:#fff; border:1px solid var(--brand); color:var(--brand); }
+    .actions { grid-column:1 / -1; display:grid; gap:12px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Board2Plan – 5-Day Trial Marketing Plan</h1>
+    <p class="lead">Fill in your details and export a 5-day marketing workbook.</p>
+
+    <div class="card">
+      <div class="card-body">
+        <div>
+          <label for="brand">Brand</label>
+          <input id="brand" class="input" value="Board2Plan" />
+        </div>
+        <div>
+          <label for="goal">Goal</label>
+          <input id="goal" class="input" value="Lead Generation" />
+        </div>
+        <div>
+          <label for="business">Business Type</label>
+          <select id="business" class="input">
+            <option>General</option>
+            <option>Restaurant / Food</option>
+            <option>Coaching / Consulting</option>
+            <option>Ecommerce / Shop</option>
+            <option>Real Estate</option>
+            <option>SaaS</option>
+            <option>Med Spa</option>
+            <option>Fitness</option>
+            <option>Nonprofit</option>
+            <option>Marketing</option>
+          </select>
+        </div>
+        <div>
+          <label for="file">Output file name</label>
+          <input id="file" class="input" value="5Day_Marketing_Plan.xlsx" />
+        </div>
+        <div class="actions">
+          <button id="download" class="btn btn-primary">⬇️ Download 5-Day Trial Excel</button>
+          <a href="/30day" class="btn btn-outline">Upgrade to 30-Day Version →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const byId = (id) => document.getElementById(id);
+    function generateBusinessTasks(businessType){
+      const lower = (businessType||'General').toLowerCase();
+      const mk = (name,tasks)=>({name,tasks});
+      return [
+        mk('Education',['Share an industry tip','Post a how-to guide','Explain a key term','Repurpose a blog']),
+        mk('Engagement',['Run a poll','Ask a question','Start a DM conversation','Host a Q&A']),
+        mk('Promotion',['Spotlight a product','Limited-time offer','Post a testimonial','Comparison post']),
+        mk('Storytelling',['Founder story','Behind-the-scenes','Customer journey','Milestone'])
+      ];
+    }
+    function buildPlanSheet(brand, goal, businessType){
+      const pillars = generateBusinessTasks(businessType);
+      const headerNote = [brand, goal ? `Goal: ${goal}` : null].filter(Boolean).join(' — ');
+      let pillarIdx = 0; const taskIdx = Array(pillars.length).fill(0);
+      const rows = Array.from({length:5},(_,i)=>{
+        const pillar = pillars[pillarIdx];
+        const task = pillar.tasks[taskIdx[pillarIdx] % pillar.tasks.length];
+        taskIdx[pillarIdx]++; pillarIdx = (pillarIdx + 1) % pillars.length;
+        return { Day:i+1, Pillar:pillar.name, 'Primary Task':task, 'Hook / Angle':'', Channel:'', 'Asset Needed':'', CTA:'', Owner:'', Status:'Not started', Notes: i===0 && headerNote ? headerNote : '' };
+      });
+      return XLSX.utils.json_to_sheet(rows);
+    }
+    function buildContentMatrixSheet(){
+      const rows = [
+        { Phase:'Day 1', Purpose:'Awareness', Formats:'Reels, short posts, polls', Examples:'Tip or myth buster' },
+        { Phase:'Day 2', Purpose:'Engagement', Formats:'Polls, questions', Examples:'Ask about preferences' },
+        { Phase:'Day 3', Purpose:'Proof', Formats:'Testimonial, case study', Examples:'Happy client story' },
+        { Phase:'Day 4', Purpose:'Nurture', Formats:'Education, how-to', Examples:'Mini tutorial' },
+        { Phase:'Day 5', Purpose:'Conversion', Formats:'Offer, CTA post', Examples:'Discount or limited slot' }
+      ];
+      return XLSX.utils.json_to_sheet(rows);
+    }
+    function buildKeywordsSheet(businessType, brand){
+      const type = (businessType||'General').toLowerCase().replace(/\s+/g,' ').trim();
+      return XLSX.utils.aoa_to_sheet([
+        ['Primary Keywords', `${type} marketing`, `${type} tips`, `${type} content`, `${brand} ${type}`],
+        ['Hashtag Seeds', `#${type.replace(/\W+/g,'')}`, '#contentmarketing', '#smallbusiness', '#growth']
+      ]);
+    }
+    function buildAnalyticsSheet(){
+      const rows = Array.from({length:5},(_,i)=> ({Day:i+1,Channel:'',Content:'',Impressions:'',Clicks:'',Likes:'',Comments:'',Shares:'',Saves:''}));
+      return XLSX.utils.json_to_sheet(rows);
+    }
+    function buildPhase1Sheet(){
+      const aoa = [
+        ['Day','Task','Area','Status','Notes'],
+        ['1','Define theme + KPI','Strategy','Not started',''],
+        ['2','Pick 1 channel + goal metric','Strategy','Not started',''],
+        ['3','Write 3 hooks & 2 CTAs','Creative','Not started',''],
+        ['4','Create 1 content asset','Production','Not started',''],
+        ['5','Post & review results','Analytics','Not started',''],
+      ];
+      return XLSX.utils.aoa_to_sheet(aoa);
+    }
+    byId('download').addEventListener('click', ()=>{
+      const brand = byId('brand').value.trim();
+      const goal = byId('goal').value.trim();
+      const business = byId('business').value.trim();
+      const fname = byId('file').value.trim() || '5Day_Marketing_Plan.xlsx';
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, buildPlanSheet(brand, goal, business), '5 Day Plan');
+      XLSX.utils.book_append_sheet(wb, buildContentMatrixSheet(), 'Content Matrix');
+      XLSX.utils.book_append_sheet(wb, buildKeywordsSheet(business, brand), 'Keywords & Hashtags');
+      XLSX.utils.book_append_sheet(wb, buildAnalyticsSheet(), 'Analytics');
+      XLSX.utils.book_append_sheet(wb, buildPhase1Sheet(), 'Phase 1');
+      XLSX.writeFile(wb, fname);
+    });
+  </script>
+</body>
+</html>
