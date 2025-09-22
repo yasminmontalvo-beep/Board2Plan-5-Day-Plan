@@ -64,8 +64,23 @@
           <input id="file" class="input" value="5Day_Marketing_Plan.xlsx" />
         </div>
         <div class="actions">
-          <button id="download" class="btn btn-primary">⬇️ Download 5-Day Trial Excel</button>
-          <a href="/30day" class="btn btn-outline">Upgrade to 30-Day Version →</a>
+  <button id="download" class="btn btn-primary">⬇️ Download 5-Day Trial Excel</button>
+
+  <!-- PayPal Buy Now Button -->
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin:0;">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <!-- Replace with your PayPal Hosted Button ID -->
+    <input type="hidden" name="hosted_button_id" value="TDEMXT4EE5KW6">
+    <!-- Redirect after payment -->
+    <input type="hidden" name="return" value="https://<username>.github.io/<repo>/thank-you/">
+    <input type="hidden" name="rm" value="2">
+    <!-- Button -->
+    <input type="submit" value="Upgrade to 30-Day Version – $99" 
+           class="btn btn-outline"
+           style="padding:12px 20px; border:1px solid #0ea5e9; border-radius:9999px; background:#fff; color:#0ea5e9; font-weight:700; cursor:pointer; width:100%;">
+  </form>
+</div>
+
         </div>
       </div>
     </div>
