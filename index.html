@@ -4,15 +4,43 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Board2Plan – 5-Day Trial Marketing Plan</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="./favicon.png">
+
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="./favicon.png">
+
+  <!-- Manifest -->
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#22c55e">
+
+  <!-- Social preview (Open Graph & Twitter) -->
+  <meta property="og:title" content="Board2Plan – 5-Day Marketing Plan">
+  <meta property="og:description" content="Stop Guessing. Start Growing. Download your free 5-day marketing plan in Excel.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://YOUR_USERNAME.github.io/YOUR_REPO/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Board2Plan – 5-Day Marketing Plan">
+  <meta name="twitter:description" content="Stop Guessing. Start Growing. Download your free 5-day marketing plan in Excel.">
+  <meta name="twitter:image" content="https://YOUR_USERNAME.github.io/YOUR_REPO/og-image.png">
+
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <style>
-    :root { --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --ring:#bae6fd; --shop:#22c55e; --shop-ring:#bbf7d0; }
+    :root { --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --ring:#bae6fd; --shop:#22c55e; }
     * { box-sizing: border-box; }
     body { margin:0; background:#f8fafc; color:var(--ink); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
-    .wrap { max-width: 900px; margin: 0 auto; padding: 28px; }
-    h1 { font-size: 28px; margin: 6px 0 16px; }
-    p.lead { color: var(--muted); margin: 0 0 16px; }
-    .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; box-shadow:0 2px 8px rgba(2,6,23,.04); }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 0; }
+    .hero {
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color:#fff; text-align:center; padding:60px 20px; border-radius:0 0 24px 24px;
+    }
+    .hero h1 { font-size: 44px; margin: 0 0 18px; font-weight: 800; }
+    .hero p { font-size:20px; margin:0; }
+    .content { padding: 28px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; box-shadow:0 2px 8px rgba(2,6,23,.04); text-align:left; }
     .card-body { padding:18px; display:grid; gap:16px; grid-template-columns: 1fr 1fr; }
     label { font-size:13px; }
     .input, select {
@@ -24,7 +52,6 @@
       border-radius:9999px; border:0; font-weight:700; cursor:pointer; font-size:15px;
     }
     .btn-primary { background:var(--brand); color:#fff; }
-    .btn-outline { background:#fff; border:1px solid var(--brand); color:var(--brand); }
     .btn-shop { background:var(--shop); color:#fff; border:0; }
     .btn-shop:hover { background:#16a34a; }
     .actions { grid-column:1 / -1; display:grid; gap:12px; }
@@ -33,48 +60,64 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>Board2Plan – 5-Day Trial Marketing Plan</h1>
-    <p class="lead">Fill in your details and export a 5-day marketing workbook.</p>
+    <div class="hero">
+      <h1>📈 Stop Guessing. Start Growing.</h1>
+      <p>In less than 60 seconds, you’ll have a structured 5-day plan with content ideas, hashtags, and analytics — ready to implement.</p>
+    </div>
 
-    <div class="card">
-      <div class="card-body">
-        <div>
-          <label for="brand">Brand</label>
-          <input id="brand" class="input" value="Board2Plan" />
-        </div>
-        <div>
-          <label for="goal">Goal</label>
-          <input id="goal" class="input" value="Lead Generation" />
-        </div>
-        <div>
-          <label for="business">Business Type</label>
-          <select id="business" class="input">
-            <option>General</option>
-            <option>Restaurant / Food</option>
-            <option>Coaching / Consulting</option>
-            <option>Ecommerce / Shop</option>
-            <option>Real Estate</option>
-            <option>SaaS</option>
-            <option>Med Spa</option>
-            <option>Fitness</option>
-            <option>Nonprofit</option>
-            <option>Marketing</option>
-          </select>
-        </div>
-        <div>
-          <label for="file">Output file name</label>
-          <input id="file" class="input" value="5Day_Marketing_Plan.xlsx" />
-        </div>
-        <div class="actions">
-          <!-- Trial download button -->
-          <button id="download" class="btn btn-primary">⬇️ Download 5-Day Trial Excel</button>
+    <div class="content">
+      <div class="card">
+        <div class="card-body">
+          <div>
+            <label for="brand">Brand</label>
+            <input id="brand" class="input" value="Board2Plan" />
+          </div>
+          <div>
+            <label for="goal">Goal</label>
+            <select id="goal" class="input">
+              <option>Lead Generation</option>
+              <option>Brand Awareness</option>
+              <option>Engagement Growth</option>
+              <option>Website Traffic</option>
+              <option>Sales / Conversions</option>
+              <option>Customer Retention</option>
+              <option>Event Promotion</option>
+              <option>Product Launch</option>
+              <option>Community Building</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="business">Business Type</label>
+            <select id="business" class="input">
+              <option>General</option>
+              <option>Restaurant / Food</option>
+              <option>Coaching / Consulting</option>
+              <option>Ecommerce / Shop</option>
+              <option>Real Estate</option>
+              <option>SaaS</option>
+              <option>Med Spa</option>
+              <option>Fitness</option>
+              <option>Nonprofit</option>
+              <option>Marketing</option>
+              <option>Trade (Lawncare / Carpentry / Roofing / Painting / Construction)</option>
+            </select>
+          </div>
+          <div>
+            <label for="file">Output file name</label>
+            <input id="file" class="input" value="5Day_Marketing_Plan.xlsx" />
+          </div>
+          <div class="actions">
+            <!-- Trial download button -->
+            <button id="download" class="btn btn-primary">⬇️ Download 5-Day Trial Excel</button>
 
-          <!-- Shopify shop button -->
-          <a href="https://YOUR-SHOPIFY-SHOP.myshopify.com" target="_blank" rel="noopener">
-            <button class="btn btn-shop" style="width:100%;">
-              🛒 Visit My Shopify Shop
-            </button>
-          </a>
+            <!-- Shopify shop button -->
+            <a href="https://YOUR-SHOPIFY-SHOP.myshopify.com" target="_blank" rel="noopener">
+              <button class="btn btn-shop" style="width:100%;">
+                🛒 Visit My Shopify Shop
+              </button>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -103,10 +146,7 @@
         taskIdx[pillarIdx]++; pillarIdx = (pillarIdx + 1) % pillars.length;
         return { Day:i+1, Pillar:pillar.name, 'Primary Task':task, 'Hook / Angle':'', Channel:'', 'Asset Needed':'', CTA:'', Owner:'', Status:'Not started', Notes: i===0 && headerNote ? headerNote : '' };
       });
-      const ws = XLSX.utils.json_to_sheet(rows);
-      ws['!cols'] = [{ wch:5 },{ wch:14 },{ wch:48 },{ wch:26 },{ wch:20 },
-                     { wch:22 },{ wch:18 },{ wch:12 },{ wch:14 },{ wch:36 }];
-      return ws;
+      return XLSX.utils.json_to_sheet(rows);
     }
 
     function buildContentMatrixSheet(){
@@ -117,26 +157,20 @@
         { Phase:'Day 4', Purpose:'Nurture', Formats:'Education, how-to', Examples:'Mini tutorial' },
         { Phase:'Day 5', Purpose:'Conversion', Formats:'Offer, CTA post', Examples:'Discount or limited slot' }
       ];
-      const ws = XLSX.utils.json_to_sheet(rows);
-      ws['!cols'] = [{ wch:16 },{ wch:20 },{ wch:30 },{ wch:50 }];
-      return ws;
+      return XLSX.utils.json_to_sheet(rows);
     }
 
     function buildKeywordsSheet(businessType, brand){
       const type = (businessType||'General').toLowerCase().replace(/\s+/g,' ').trim();
-      const ws = XLSX.utils.aoa_to_sheet([
+      return XLSX.utils.aoa_to_sheet([
         ['Primary Keywords', `${type} marketing`, `${type} tips`, `${type} content`, `${brand} ${type}`],
         ['Hashtag Seeds', `#${type.replace(/\W+/g,'')}`, '#contentmarketing', '#smallbusiness', '#growth']
       ]);
-      ws['!cols'] = [{ wch:20 },{ wch:64 }];
-      return ws;
     }
 
     function buildAnalyticsSheet(){
       const rows = Array.from({length:5},(_,i)=> ({Day:i+1,Channel:'',Content:'',Impressions:'',Clicks:'',Likes:'',Comments:'',Shares:'',Saves:''}));
-      const ws = XLSX.utils.json_to_sheet(rows);
-      ws['!cols'] = [{wch:6},{wch:12},{wch:36},{wch:12},{wch:10},{wch:10},{wch:10},{wch:10},{wch:10}];
-      return ws;
+      return XLSX.utils.json_to_sheet(rows);
     }
 
     function buildPhase1Sheet(){
@@ -148,9 +182,7 @@
         ['4','Create 1 content asset','Production','Not started',''],
         ['5','Post & review results','Analytics','Not started',''],
       ];
-      const ws = XLSX.utils.aoa_to_sheet(aoa);
-      ws['!cols'] = [{wch:6},{wch:40},{wch:14},{wch:14},{wch:36}];
-      return ws;
+      return XLSX.utils.aoa_to_sheet(aoa);
     }
 
     byId('download').addEventListener('click', ()=>{
