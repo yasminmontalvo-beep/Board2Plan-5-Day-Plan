@@ -6,7 +6,7 @@
   <title>Board2Plan – 5-Day Trial Marketing Plan</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <style>
-    :root { --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --ring:#bae6fd; }
+    :root { --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --ring:#bae6fd; --shop:#22c55e; --shop-ring:#bbf7d0; }
     * { box-sizing: border-box; }
     body { margin:0; background:#f8fafc; color:var(--ink); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
     .wrap { max-width: 900px; margin: 0 auto; padding: 28px; }
@@ -24,6 +24,9 @@
       border-radius:9999px; border:0; font-weight:700; cursor:pointer; font-size:15px;
     }
     .btn-primary { background:var(--brand); color:#fff; }
+    .btn-outline { background:#fff; border:1px solid var(--brand); color:var(--brand); }
+    .btn-shop { background:var(--shop); color:#fff; border:0; }
+    .btn-shop:hover { background:#16a34a; }
     .actions { grid-column:1 / -1; display:grid; gap:12px; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -63,15 +66,15 @@
           <input id="file" class="input" value="5Day_Marketing_Plan.xlsx" />
         </div>
         <div class="actions">
-  <!-- Trial download button -->
-  <button id="download" class="btn btn-primary">⬇️ Download 5-Day Trial Excel</button>
+          <!-- Trial download button -->
+          <button id="download" class="btn btn-primary">⬇️ Download 5-Day Trial Excel</button>
 
-  <!-- Shopify shop button -->
-  <a href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener">
-    <button class="btn btn-outline" style="width:100%;">
-      🛒 Visit My Shopify Shop
-    </button>
-  </a>
+          <!-- Shopify shop button -->
+          <a href="https://YOUR-SHOPIFY-SHOP.myshopify.com" target="_blank" rel="noopener">
+            <button class="btn btn-shop" style="width:100%;">
+              🛒 Visit My Shopify Shop
+            </button>
+          </a>
         </div>
       </div>
     </div>
