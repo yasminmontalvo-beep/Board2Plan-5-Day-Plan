@@ -11,12 +11,12 @@
   <meta name="theme-color" content="#22c55e">
 
   <meta property="og:title" content="Board2Plan – 5-Day Marketing Plan (Trial)">
-  <meta property="og:description" content="Structured marketing plan in Excel with daily tasks, hashtags, analytics, best post times, and account tracker.">
+  <meta property="og:description" content="Structured marketing plan in Excel with daily tasks, hashtags, analytics, best post times, and an accounts tracker.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://YOUR_USERNAME.github.io/YOUR_REPO/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Board2Plan – 5-Day Marketing Plan (Trial)">
-  <meta name="twitter:description" content="Structured marketing plan in Excel with daily tasks, hashtags, analytics, best post times, and account tracker.">
+  <meta name="twitter:description" content="Structured marketing plan in Excel with daily tasks, hashtags, best post times, and an accounts tracker.">
   <meta name="twitter:image" content="https://YOUR_USERNAME.github.io/YOUR_REPO/og-image.png">
 
   <style>
@@ -42,7 +42,7 @@
     .btn-shop:hover { background:#16a34a; }
     .actions { grid-column:1 / -1; display:grid; gap:12px; }
     .promo { margin-top:28px; display:grid; grid-template-columns: 1fr 1fr; gap:20px; align-items:center; }
-    @media (max-width: 900px){ .promo { grid-template-columns: 1fr; } }
+    @media (max-width: 900px){ .promo { grid-template-columns: 1 fr; } }
     .promo img { width:100%; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 2px 8px rgba(2,6,23,.04); }
     .promo h2 { margin:0 0 10px; font-size:26px; }
     .promo p { color:var(--muted); margin:0 0 16px; line-height:1.5; }
@@ -50,7 +50,9 @@
     .foot { text-align:center; color:var(--muted); font-size:12px; padding:24px 0 36px; }
     .foot a { color:#22c55e; text-decoration:none; font-weight:600; }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <!-- ExcelJS for creating .xlsx with dropdowns (data validation) -->
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 </head>
 <body>
   <div class="wrap">
@@ -95,16 +97,6 @@
               <option>Nonprofit</option>
               <option>Marketing</option>
               <option>Trade (Lawncare / Carpentry / Roofing / Painting / Construction)</option>
-            </select>
-          </div>
-          <div>
-            <label for="status">Status (applies to all rows)</label>
-            <select id="status" class="input">
-              <option>Not Started</option>
-              <option>In Progress</option>
-              <option>Scheduled</option>
-              <option>Published</option>
-              <option>Complete</option>
             </select>
           </div>
           <div>
@@ -161,90 +153,179 @@
       ];
     }
 
-    function buildPlanSheet(days, brand, goal, businessType, selectedStatus){
+    function zebraFill(worksheet, startRow, endRow, startCol, endCol) {
+      for (let r = startRow; r <= endRow; r++) {
+        if ((r % 2) === 0) {
+          for (let c = startCol; c <= endCol; c++) {
+            worksheet.getCell(r, c).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF8FAFC'} }; // slate-50
+          }
+        }
+      }
+    }
+
+    function borderAll(worksheet, startRow, endRow, startCol, endCol) {
+      const border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+      for (let r = startRow; r <= endRow; r++) {
+        for (let c = startCol; c <= endCol; c++) {
+          worksheet.getCell(r, c).border = border;
+          worksheet.getCell(r, c).alignment = { vertical:'top', wrapText:true };
+        }
+      }
+    }
+
+    async function buildWorkbook(days, brand, goal, businessType, fname) {
+      const ExcelJS = window['exceljs'];
+      const wb = new ExcelJS.Workbook();
+      wb.creator = 'Board2Plan';
+      wb.created = new Date();
+
+      const headerFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE2F2FE'} };
+      const headerBorder = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+      const headerFont = { bold:true };
+
+      // Plan
+      const plan = wb.addWorksheet(days===5 ? '5 Day Plan' : '30 Day Plan', { views:[{state:'frozen', ySplit:1}] });
+      const planColumns = [
+        { header:'Day', key:'day', width:6 },
+        { header:'Week', key:'week', width:6 },
+        { header:'Pillar', key:'pillar', width:14 },
+        { header:'Primary Task', key:'task', width:26 },
+        { header:'Opening Line / Attention Grabber', key:'hook', width:34 },
+        { header:'Platform', key:'platform', width:14 },
+        { header:'Content Needed', key:'asset', width:20 },
+        { header:'CTA', key:'cta', width:16 },
+        { header:'Owner', key:'owner', width:14 },
+        { header:'Status', key:'status', width:14 },
+        { header:'Notes', key:'notes', width:30 },
+      ];
+      plan.columns = planColumns;
+      plan.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=headerFont; c.border=headerBorder; c.alignment={vertical:'middle'}; });
+
       const pillars = generateBusinessTasks(businessType);
+      let p=0; const idx = Array(pillars.length).fill(0);
       const headerNote = [brand, goal ? `Goal: ${goal}` : null].filter(Boolean).join(' — ');
-      let p = 0; const idx = Array(pillars.length).fill(0);
-      const rows = Array.from({length:days},(_,i)=>{ 
+      for (let i=0;i<days;i++) {
         const pillar = pillars[p];
         const task = pillar.tasks[idx[p] % pillar.tasks.length];
-        idx[p]++; p = (p + 1) % pillars.length;
-        return {
-          Day: i+1,
-          Week: Math.floor(i/7)+1,
-          Pillar: pillar.name,
-          'Primary Task': task,
-          'Opening Line / Attention Grabber': '',
-          'Platform': '',
-          'Content Needed': '',
-          CTA: '',
-          Owner: '',
-          Status: selectedStatus,
-          Notes: i===0 && headerNote ? headerNote : ''
+        idx[p]++; p = (p+1) % pillars.length;
+        plan.addRow({
+          day:i+1, week:Math.floor(i/7)+1, pillar:pillar.name, task:task,
+          hook:'', platform:'', asset:'', cta:'', owner:'', status:'Not Started', notes: i===0 && headerNote? headerNote: ''
+        });
+      }
+      plan.autoFilter = { from: 'A1', to: `K${days+1}` };
+      zebraFill(plan, 2, days+1, 1, 11);
+      borderAll(plan, 1, days+1, 1, 11);
+      for (let r=2; r<=days+1; r++) {
+        plan.getCell(`J${r}`).dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: ['"Not Started,In Progress,Scheduled,Published,Complete"']
         };
-      });
-      return XLSX.utils.json_to_sheet(rows);
-    }
+      }
 
-    function buildKeywordsSheet(businessType, brand){
-      const type = (businessType||'General').toLowerCase().replace(/\s+/g,' ').trim();
-      const baseTag = type.replace(/\W+/g,'');
-      return XLSX.utils.aoa_to_sheet([
-        ['Primary Keywords', `${type} marketing`, `${type} tips`, `${type} content`, `${brand} ${type}`],
-        ['Hashtag Seeds', `#${baseTag}`, '#contentmarketing', '#smallbusiness', '#growth', '#marketingplan']
-      ]);
-    }
+      // Keywords & Hashtags
+      const kw = wb.addWorksheet('Keywords & Hashtags', {views:[{state:'frozen', ySplit:1}]});
+      kw.addRow(['Primary Keywords', `${(businessType||'General').toLowerCase()} marketing`, `${(businessType||'General').toLowerCase()} tips`, `${(businessType||'General').toLowerCase()} content`, `${brand} ${(businessType||'General').toLowerCase()}`]);
+      const baseTag = (businessType||'General').toLowerCase().replace(/\W+/g,'');
+      kw.addRow(['Hashtag Seeds', `#${baseTag}`, '#contentmarketing', '#smallbusiness', '#growth', '#marketingplan']);
+      kw.getRow(1).font = headerFont;
+      kw.getRow(2).font = headerFont;
+      kw.columns = [{width:24},{width:24},{width:24},{width:24},{width:28}];
+      borderAll(kw,1,2,1,5);
 
-    function buildAnalyticsSheet(days, selectedStatus){
-      const rows = Array.from({length:days},(_,i)=> ({Day:i+1, Week: Math.floor(i/7)+1, Platform:'', Content:'', Impressions:'', Clicks:'', Likes:'', Comments:'', Shares:'', Saves:'', Status:selectedStatus}));
-      return XLSX.utils.json_to_sheet(rows);
-    }
-
-    function buildBestTimesSheet(){
-      const rows = [
-        {Platform:'Instagram', 'Best Days':'Mon–Fri', 'Best Times (EST)':'11 AM – 2 PM, 7 PM'},
-        {Platform:'Facebook',  'Best Days':'Mon–Thu', 'Best Times (EST)':'10 AM – 1 PM'},
-        {Platform:'LinkedIn',  'Best Days':'Tue–Thu', 'Best Times (EST)':'8–10 AM, 12 PM'},
-        {Platform:'TikTok',    'Best Days':'Tue–Fri', 'Best Times (EST)':'6–9 AM, 7 PM'},
-        {Platform:'YouTube',   'Best Days':'Thu–Sun', 'Best Times (EST)':'12–3 PM'},
-        {Platform:'Twitter/X', 'Best Days':'Mon–Fri', 'Best Times (EST)':'9 AM – 12 PM'},
-        {Platform:'Pinterest', 'Best Days':'Sat–Sun', 'Best Times (EST)':'8–11 PM'},
+      // Analytics
+      const an = wb.addWorksheet('Analytics', {views:[{state:'frozen', ySplit:1}]});
+      const anColumns = [
+        { header:'Day', key:'day', width:6 },
+        { header:'Week', key:'week', width:6 },
+        { header:'Platform', key:'platform', width:14 },
+        { header:'Content', key:'content', width:26 },
+        { header:'Impressions', key:'impr', width:12 },
+        { header:'Clicks', key:'clicks', width:10 },
+        { header:'Likes', key:'likes', width:10 },
+        { header:'Comments', key:'comments', width:12 },
+        { header:'Shares', key:'shares', width:10 },
+        { header:'Saves', key:'saves', width:10 },
+        { header:'Status', key:'status', width:14 },
       ];
-      const ws = XLSX.utils.json_to_sheet(rows);
-      XLSX.utils.sheet_add_aoa(ws, [['Note: Times are in EST. Adjust based on your audience analytics and timezone.']], {origin: 'A9'});
-      return ws;
-    }
+      an.columns = anColumns;
+      an.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=headerFont; c.border=headerBorder; c.alignment={vertical:'middle'}; });
+      for (let i=0;i<days;i++) {
+        an.addRow({ day:i+1, week:Math.floor(i/7)+1, platform:'', content:'', impr:'', clicks:'', likes:'', comments:'', shares:'', saves:'', status:'Not Started' });
+      }
+      an.autoFilter = { from: 'A1', to: `K${days+1}` };
+      zebraFill(an, 2, days+1, 1, 11);
+      borderAll(an, 1, days+1, 1, 11);
+      for (let r=2; r<=days+1; r++) {
+        an.getCell(`K${r}`).dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: ['"Not Started,In Progress,Scheduled,Published,Complete"']
+        };
+      }
+      // Totals row (days + 2)
+      const totalsRowIndex = days + 2;
+      an.getCell(`A${totalsRowIndex}`).value = 'Totals';
+      an.getCell(`A${totalsRowIndex}`).font = { bold: true };
+      # Formulas for numeric columns E..J
+      an.getCell(f'E{totalsRowIndex}').value = {'formula': f'SUM(E2:E{days+1})'}
+      an.getCell(f'F{totalsRowIndex}').value = {'formula': f'SUM(F2:F{days+1})'}
+      an.getCell(f'G{totalsRowIndex}').value = {'formula': f'SUM(G2:G{days+1})'}
+      an.getCell(f'H{totalsRowIndex}').value = {'formula': f'SUM(H2:H{days+1})'}
+      an.getCell(f'I{totalsRowIndex}').value = {'formula': f'SUM(I2:I{days+1})'}
+      an.getCell(f'J{totalsRowIndex}').value = {'formula': f'SUM(J2:J{days+1})'}
+      # Style totals row across A..K
+      for (let c = 1; c <= 11; c++) {
+        const cell = an.getCell(totalsRowIndex, c);
+        cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF1F5F9'} }; // slate-100
+        cell.font = { bold:true };
+        cell.border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+      }
 
-    function buildAccountsSheet(){
-      const aoa = [
-        ['⚠️ This sheet is for convenience only. Do not share this file. Store securely.'],
-        ['Platform','Username / Email','Password','Notes'],
-        ['Instagram','','',''],
-        ['Facebook','','',''],
-        ['LinkedIn','','',''],
-        ['TikTok','','',''],
-        ['YouTube','','',''],
-        ['Twitter/X','','',''],
-        ['Pinterest','','','']
-      ];
-      return XLSX.utils.aoa_to_sheet(aoa);
+      // Best Post Times
+      const bt = wb.addWorksheet('Best Post Times', {views:[{state:'frozen', ySplit:1}]});
+      bt.addRow(['Platform','Best Days','Best Times (EST)']).font = headerFont;
+      [['Instagram','Mon–Fri','11 AM – 2 PM, 7 PM'],
+       ['Facebook','Mon–Thu','10 AM – 1 PM'],
+       ['LinkedIn','Tue–Thu','8–10 AM, 12 PM'],
+       ['TikTok','Tue–Fri','6–9 AM, 7 PM'],
+       ['YouTube','Thu–Sun','12–3 PM'],
+       ['Twitter/X','Mon–Fri','9 AM – 12 PM'],
+       ['Pinterest','Sat–Sun','8–11 PM']].forEach(row=> bt.addRow(row));
+      bt.columns = [{width:18},{width:16},{width:30}];
+      zebraFill(bt, 2, 8, 1, 3);
+      borderAll(bt, 1, 8, 1, 3);
+      bt.addRow([]);
+      bt.addRow(['Note: Times are in EST. Adjust based on your audience analytics and timezone.']);
+
+      // Accounts
+      const ac = wb.addWorksheet('Accounts', {views:[{state:'frozen', ySplit:2}]});
+      ac.addRow(['⚠️ This sheet is for convenience only. Do not share this file. Store securely.']);
+      ac.addRow(['Platform','Username / Email','Password','Notes']).font = headerFont;
+      ['Instagram','Facebook','LinkedIn','TikTok','YouTube','Twitter/X','Pinterest'].forEach(p => ac.addRow([p,'','','']));
+      ac.columns = [{width:16},{width:28},{width:22},{width:28}];
+      borderAll(ac,1,9,1,4);
+
+      // Save
+      const buffer = await wb.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fname;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
     }
 
     document.getElementById('download').addEventListener('click', ()=>{
       const brand = byId('brand').value.trim();
       const goal = byId('goal').value.trim();
       const business = byId('business').value.trim();
-      const selectedStatus = byId('status').value;
       const fname = byId('file').value.trim() || '5Day_Marketing_Plan.xlsx';
-      const days = 5;
-
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, buildPlanSheet(days, brand, goal, business, selectedStatus), days===5 ? '5 Day Plan' : '30 Day Plan');
-      XLSX.utils.book_append_sheet(wb, buildKeywordsSheet(business, brand), 'Keywords & Hashtags');
-      XLSX.utils.book_append_sheet(wb, buildAnalyticsSheet(days, selectedStatus), 'Analytics');
-      XLSX.utils.book_append_sheet(wb, buildBestTimesSheet(), 'Best Post Times');
-      XLSX.utils.book_append_sheet(wb, buildAccountsSheet(), 'Accounts');
-      XLSX.writeFile(wb, fname);
+      buildWorkbook(5, brand, goal, business, fname);
     });
   </script>
 </body>
