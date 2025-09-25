@@ -4,21 +4,18 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Board2Plan – 5-Day Marketing Plan (Trial)</title>
-
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="apple-touch-icon" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#22c55e">
-
   <meta property="og:title" content="Board2Plan – 5-Day Marketing Plan (Trial)">
   <meta property="og:description" content="Structured marketing plan in Excel with daily tasks, hashtags, analytics, best post times, and an accounts tracker.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://yasminmontalvo-beep.github.io/Board2Plan-5-Day-Plan/">
+  <meta property="og:image" content="og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Board2Plan – 5-Day Marketing Plan (Trial)">
   <meta name="twitter:description" content="Structured marketing plan in Excel with daily tasks, hashtags, best post times, and an accounts tracker.">
-  <meta name="twitter:image" content="https://YOUR_USERNAME.github.io/YOUR_REPO/og-image.png">
-
+  <meta name="twitter:image" content="og-image.png">
   <style>
     :root { --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --ring:#bae6fd; --shop:#22c55e; }
     * { box-sizing: border-box; }
@@ -42,7 +39,7 @@
     .btn-shop:hover { background:#16a34a; }
     .actions { grid-column:1 / -1; display:grid; gap:12px; }
     .promo { margin-top:28px; display:grid; grid-template-columns: 1fr 1fr; gap:20px; align-items:center; }
-    @media (max-width: 900px){ .promo { grid-template-columns: 1 fr; } }
+    @media (max-width: 900px){ .promo { grid-template-columns: 1fr; } }
     .promo img { width:100%; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 2px 8px rgba(2,6,23,.04); }
     .promo h2 { margin:0 0 10px; font-size:26px; }
     .promo p { color:var(--muted); margin:0 0 16px; line-height:1.5; }
@@ -50,8 +47,6 @@
     .foot { text-align:center; color:var(--muted); font-size:12px; padding:24px 0 36px; }
     .foot a { color:#22c55e; text-decoration:none; font-weight:600; }
   </style>
-
-  <!-- ExcelJS for creating .xlsx with dropdowns (data validation) -->
   <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 </head>
 <body>
@@ -60,7 +55,6 @@
       <h1>📅 Board2Plan – 5-Day Marketing Plan (Trial)</h1>
       <p>Create a structured plan with daily tasks, keywords/hashtags, analytics, best post times, and an accounts tracker.</p>
     </div>
-
     <div class="content">
       <div class="card">
         <div class="card-body">
@@ -103,31 +97,28 @@
             <label for="file">Output file name</label>
             <input id="file" class="input" value="5Day_Marketing_Plan.xlsx" />
           </div>
-
           <div class="actions">
             <button id="download" class="btn btn-primary">⬇️ Download Excel</button>
-            <a href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener">
+            <a href="https://YOUR-SHOPIFY-SHOP.myshopify.com" target="_blank" rel="noopener">
               <button class="btn btn-shop" style="width:100%;">🛒 Buy on Shopify</button>
             </a>
           </div>
-          <div class="small">Sheets: Plan, Keywords & Hashtags, Analytics, Best Post Times, Accounts.</div>
-        </div>
-      </div>
-
-      <div class="promo">
-        <img src="./ad.png" alt="Board2Plan Ad">
-        <div>
-          <h2>Out of ideas? We’ve got 5.</h2>
-          <p>Get guided content prompts, starter hashtags, analytics tracker, best posting times, and an accounts sheet — all inside a single Excel download.</p>
-          <a href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener"><button class="btn btn-shop">Buy Now on Shopify</button></a>
-          <div class="small">One-time purchase. Instant download.</div>
+          <div class="small">Sheets: Plan, Keywords & Hashtags, Analytics (with Totals), Best Post Times, Accounts.</div>
         </div>
       </div>
     </div>
-
+    <div class="promo">
+      <img src="./ad.png" alt="Board2Plan Ad">
+      <div>
+        <h2>Out of ideas? We’ve got 5.</h2>
+        <p>Get guided content prompts, starter hashtags, analytics tracker, best posting times, and an accounts sheet — all inside a single Excel download.</p>
+        <a href="https://YOUR-SHOPIFY-SHOP.myshopify.com" target="_blank" rel="noopener"><button class="btn btn-shop">Buy Now on Shopify</button></a>
+        <div class="small">One-time purchase. Instant download.</div>
+      </div>
+    </div>
     <div class="foot">
       © Board2Plan · 
-      <a href="mailto:Yasmin.montalvo@gmail.com?subject=Board2Plan%20Support&body=Hello%20Board2Plan%20Team,%0D%0A%0D%0AI%20need%20help%20with%20my%20Marketing%20Plan.%20Here%20are%20the%20details:%0D%0A- Brand:%20%0D%0A- Goal:%20%0D%0A- Business%20Type:%20%0D%0A%0D%0AThank%20you!" target="_blank">
+      <a href="mailto:yourname@example.com?subject=Board2Plan%20Support&body=Hello%20Board2Plan%20Team,%0D%0A%0D%0AI%20need%20help%20with%20my%20Marketing%20Plan.%20Here%20are%20the%20details:%0D%0A- Brand:%20%0D%0A- Goal:%20%0D%0A- Business%20Type:%20%0D%0A%0D%0AThank%20you!" target="_blank">
         Need help?
       </a>
     </div>
@@ -157,7 +148,7 @@
       for (let r = startRow; r <= endRow; r++) {
         if ((r % 2) === 0) {
           for (let c = startCol; c <= endCol; c++) {
-            worksheet.getCell(r, c).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF8FAFC'} }; // slate-50
+            worksheet.getCell(r, c).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF8FAFC'} };
           }
         }
       }
@@ -167,14 +158,15 @@
       const border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
       for (let r = startRow; r <= endRow; r++) {
         for (let c = startCol; c <= endCol; c++) {
-          worksheet.getCell(r, c).border = border;
-          worksheet.getCell(r, c).alignment = { vertical:'top', wrapText:true };
+          const cell = worksheet.getCell(r, c);
+          cell.border = border;
+          cell.alignment = { vertical:'top', wrapText:true };
         }
       }
     }
 
     async function buildWorkbook(days, brand, goal, businessType, fname) {
-      const ExcelJS = window['exceljs'];
+      const ExcelJS = window.ExcelJS;
       const wb = new ExcelJS.Workbook();
       wb.creator = 'Board2Plan';
       wb.created = new Date();
@@ -183,7 +175,6 @@
       const headerBorder = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
       const headerFont = { bold:true };
 
-      // Plan
       const plan = wb.addWorksheet(days===5 ? '5 Day Plan' : '30 Day Plan', { views:[{state:'frozen', ySplit:1}] });
       const planColumns = [
         { header:'Day', key:'day', width:6 },
@@ -224,7 +215,6 @@
         };
       }
 
-      // Keywords & Hashtags
       const kw = wb.addWorksheet('Keywords & Hashtags', {views:[{state:'frozen', ySplit:1}]});
       kw.addRow(['Primary Keywords', `${(businessType||'General').toLowerCase()} marketing`, `${(businessType||'General').toLowerCase()} tips`, `${(businessType||'General').toLowerCase()} content`, `${brand} ${(businessType||'General').toLowerCase()}`]);
       const baseTag = (businessType||'General').toLowerCase().replace(/\W+/g,'');
@@ -234,7 +224,6 @@
       kw.columns = [{width:24},{width:24},{width:24},{width:24},{width:28}];
       borderAll(kw,1,2,1,5);
 
-      // Analytics
       const an = wb.addWorksheet('Analytics', {views:[{state:'frozen', ySplit:1}]});
       const anColumns = [
         { header:'Day', key:'day', width:6 },
@@ -264,26 +253,22 @@
           formulae: ['"Not Started,In Progress,Scheduled,Published,Complete"']
         };
       }
-      // Totals row (days + 2)
       const totalsRowIndex = days + 2;
       an.getCell(`A${totalsRowIndex}`).value = 'Totals';
       an.getCell(`A${totalsRowIndex}`).font = { bold: true };
-      # Formulas for numeric columns E..J
-      an.getCell(f'E{totalsRowIndex}').value = {'formula': f'SUM(E2:E{days+1})'}
-      an.getCell(f'F{totalsRowIndex}').value = {'formula': f'SUM(F2:F{days+1})'}
-      an.getCell(f'G{totalsRowIndex}').value = {'formula': f'SUM(G2:G{days+1})'}
-      an.getCell(f'H{totalsRowIndex}').value = {'formula': f'SUM(H2:H{days+1})'}
-      an.getCell(f'I{totalsRowIndex}').value = {'formula': f'SUM(I2:I{days+1})'}
-      an.getCell(f'J{totalsRowIndex}').value = {'formula': f'SUM(J2:J{days+1})'}
-      # Style totals row across A..K
+      an.getCell(`E${totalsRowIndex}`).value = { formula: `SUM(E2:E${days+1})` };
+      an.getCell(`F${totalsRowIndex}`).value = { formula: `SUM(F2:F${days+1})` };
+      an.getCell(`G${totalsRowIndex}`).value = { formula: `SUM(G2:G${days+1})` };
+      an.getCell(`H${totalsRowIndex}`).value = { formula: `SUM(H2:H${days+1})` };
+      an.getCell(`I${totalsRowIndex}`).value = { formula: `SUM(I2:I${days+1})` };
+      an.getCell(`J${totalsRowIndex}`).value = { formula: `SUM(J2:J${days+1})` };
       for (let c = 1; c <= 11; c++) {
         const cell = an.getCell(totalsRowIndex, c);
-        cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF1F5F9'} }; // slate-100
+        cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF1F5F9'} };
         cell.font = { bold:true };
         cell.border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
       }
 
-      // Best Post Times
       const bt = wb.addWorksheet('Best Post Times', {views:[{state:'frozen', ySplit:1}]});
       bt.addRow(['Platform','Best Days','Best Times (EST)']).font = headerFont;
       [['Instagram','Mon–Fri','11 AM – 2 PM, 7 PM'],
@@ -299,7 +284,6 @@
       bt.addRow([]);
       bt.addRow(['Note: Times are in EST. Adjust based on your audience analytics and timezone.']);
 
-      // Accounts
       const ac = wb.addWorksheet('Accounts', {views:[{state:'frozen', ySplit:2}]});
       ac.addRow(['⚠️ This sheet is for convenience only. Do not share this file. Store securely.']);
       ac.addRow(['Platform','Username / Email','Password','Notes']).font = headerFont;
@@ -307,7 +291,6 @@
       ac.columns = [{width:16},{width:28},{width:22},{width:28}];
       borderAll(ac,1,9,1,4);
 
-      // Save
       const buffer = await wb.xlsx.writeBuffer();
       const blob = new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
       const url = URL.createObjectURL(blob);
