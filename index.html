@@ -53,7 +53,7 @@ footer{margin-top:28px;color:#64748b;font-size:13px;text-align:center}footer a{c
     </div>
   </div>
 
-  <div class="promo"><strong>Out of ideas? We’ve got 5.</strong><p>Each download pulls 5 fresh, business-specific ideas from a larger library.</p></div>
+  <div class="promo"><strong>Tried the 5 day Trial and ready for the 30 day plan?Click on the Shopify button!</strong><p>Each download pulls 5 fresh, business-specific ideas from a larger library.</p></div>
 
   <footer>Questions? Contact us at <a href="mailto:Yasmin.montalvo@gmail.com">Yasmin.montalvo@gmail.com</a></footer>
 </div>
@@ -78,7 +78,7 @@ function ideaTemplates(bt){
     ['Facebook','Carousel','Top templates for {{bt}} to use this month.','Promotional','Download']
   ];
   const out = [];
-  for(let i=0;i<15;i++){
+  for(let i=0;i<5;i++){
     const t = base[i % base.length].slice();
     if(i >= base.length) t[2] += ` (v${1+Math.floor(i/base.length)})`;
     out.push(t);
