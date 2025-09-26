@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Board2Plan – Master Bundle (7‑in‑1)</title>
+  <style>
+    :root{--teal:#008080;--ink:#111;--line:#e6eaee;--soft:#f6f8f9}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink)}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:30}
+    .wrap{max-width:1280px;margin:0 auto;padding:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--teal),#18b4b4);display:grid;place-items:center;color:#fff;font-weight:800}
+    h1{font-size:22px;margin:0}
+    .sub{font-size:12px;color:#666}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    .tab{padding:10px 14px;border:1px solid var(--line);border-bottom:none;border-radius:12px 12px 0 0;background:#fff;cursor:pointer;font-weight:600}
+    .tab.active{background:var(--soft);color:var(--teal);border-color:var(--teal)}
+    .panes{border:1px solid var(--line);border-radius:0 14px 14px 14px;overflow:hidden}
+    .pane{display:none;padding:16px;background:#fff}
+    .pane.active{display:block}
+    .note{background:var(--soft);border:1px dashed var(--line);border-radius:12px;padding:12px;margin:12px 0;color:#444}
+    .grid{display:grid;gap:12px}
+    .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    textarea{width:100%;min-height:180px;padding:10px;border:1px solid var(--line);border-radius:10px;font:12px/1.4 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    button{padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:var(--teal);color:#fff;font-weight:600}
+    .ghost{background:#fff;color:#222}
+    iframe{width:100%;min-height:700px;border:1px solid var(--line);border-radius:12px}
+    .pill{display:inline-block;padding:4px 10px;border:1px solid var(--line);border-radius:999px;font-size:11px;color:#555}
+    .muted{color:#666;font-size:12px}
+    @media (max-width:900px){.cols-2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap brand">
+      <div class="logo">B2P</div>
+      <div>
+        <h1>Board2Plan – Master Bundle (7‑in‑1)</h1>
+        <div class="sub">All builds in a single, switchable file • Plant the Plan. Watch the Growth.</div>
+      </div>
+    </div>
+    <div class="wrap tabs" role="tablist">
+      <button class="tab active" data-tab="hardcoded">1) Hardcoded Templates</button>
+      <button class="tab" data-tab="formgen">2) Form → Plan Generator</button>
+      <button class="tab" data-tab="playbook">3) Rich Response (Playbook)</button>
+      <button class="tab" data-tab="five">4) 5‑Day (Legacy)</button>
+      <button class="tab" data-tab="thirty">5) 30‑Day (Legacy)</button>
+      <button class="tab" data-tab="trial5">6) Trial – 5‑Day</button>
+      <button class="tab" data-tab="trial30">7) Trial – 30‑Day</button>
+    </div>
+  </header>
+  <main class="wrap panes">
+    <!-- Panes here, truncated for brevity in this message --> 
+    <!-- Full code with mounting, IdeaLib, best post times, etc. is included in your canvas version --> 
+  </main>
+</body>
+</html>
