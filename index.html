@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Board2Plan – 5‑Day Marketing Plan (Final)</title>
+  <title>Board2Plan – 5‑Day Marketing Plan (Business-Specific)</title>
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#22c55e">
@@ -23,13 +23,16 @@
     .btn-shop { background:var(--shop); color:#fff; }
     .actions { display:grid; gap:10px; margin-top:8px; }
     .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:16px; box-shadow:0 2px 8px rgba(2,6,23,.04); }
+    .promo { margin-top:18px; background:#fff; border:1px dashed #cbd5e1; border-radius:14px; padding:16px; text-align:center; }
+    footer { margin-top:28px; color:#64748b; font-size:13px; text-align:center; }
+    footer a { color:#0ea5e9; text-decoration:none; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 </head>
 <body>
   <div class="wrap">
     <h1>Board2Plan – 5‑Day Marketing Plan</h1>
-    <p>Final merged build: Simple UI + Goal dropdown, and enhanced Excel (Analytics warning & totals, Best Post Times, Accounts unlocked, Keywords & Hashtags).</p>
+    <p>Generate a business-specific plan. Includes Analytics (warning + totals), Best Post Times, Accounts (unlocked), and Keywords & Hashtags.</p>
     <div class="card">
       <div class="grid">
         <div>
@@ -75,9 +78,102 @@
         <a href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener"><button class="btn btn-shop">🛒 Buy on Shopify</button></a>
       </div>
     </div>
+
+    <div class="promo">
+      <strong>Out of ideas? We’ve got 5.</strong>
+      <p>Click “Download Excel” to get five ready-to-use, business‑specific post ideas tailored to your industry.</p>
+    </div>
+
+    <footer>
+      Questions? Contact us at <a href="mailto:Yasmin.montalvo@gmail.com">Yasmin.montalvo@gmail.com</a>
+    </footer>
   </div>
 
   <script>
+    // Return 5 rows based on the selected business type
+    function planRowsFor(business) {
+      const rows = {
+        "General": [
+          [1,'Facebook','Image Post','Share a customer success quote overlayed on your brand image.','Educational','Learn more on our website'],
+          [2,'Instagram','Carousel','Before/after carousel: problem → solution your product provides.','Promotional','Tap to get started'],
+          [3,'BlueSky','Text Post','Ask: “What’s your #1 challenge planning content?”','Community/Engagement','Reply below'],
+          [4,'YouTube','Tutorial Video','3-step walkthrough: setting a weekly content rhythm.','Educational','Watch the full guide'],
+          [5,'YouTube','YouTube Shorts','30-sec “plan with me” timelapse using your calendar.','Trending/Entertainment','See the full process']
+        ],
+        "Restaurant / Food": [
+          [1,'Instagram','Reel','Chef-prep reel of your signature dish with quick tips.','Educational','Book a table'],
+          [2,'Facebook','Image Post','Daily special with mouthwatering close-up and price.','Promotional','Order online'],
+          [3,'BlueSky','Text Post','“Pineapple on pizza: yay or nay?” spark a debate.','Community/Engagement','Comment your vote'],
+          [4,'YouTube','Tutorial Video','How to pair wine with your top entrée (3 pairings).','Educational','Subscribe for more'],
+          [5,'Instagram','Story','Behind-the-scenes: team plating during dinner rush.','Behind-the-Scenes','Follow for daily specials']
+        ],
+        "Coaching / Consulting": [
+          [1,'LinkedIn','Document Post','1-page framework: “Plan, Post, Prosper” weekly cadence.','Educational','Download the template'],
+          [2,'Instagram','Carousel','Client case study: baseline → outcome with metrics.','Promotional','Book a discovery call'],
+          [3,'BlueSky','Thread','“What goal are you stuck on right now?” offer guidance.','Community/Engagement','Ask me anything'],
+          [4,'YouTube','Tutorial Video','Audit a sample content calendar and fix bottlenecks.','Educational','Watch the full audit'],
+          [5,'Facebook','Live Stream','Live Q&A: 30 minutes of content planning tips.','Educational','Join the session']
+        ],
+        "Ecommerce / Shop": [
+          [1,'Instagram','Carousel','Top 5 products for Q4 with benefits per slide.','Promotional','Shop now'],
+          [2,'TikTok','Short Video','Unboxing + quick demo with trending audio.','Trending/Entertainment','Grab yours today'],
+          [3,'Facebook','Image Post','UGC photo with a short testimonial quote.','Community/Engagement','Share your experience'],
+          [4,'YouTube','Tutorial Video','How to choose the right size/variant (fit guide).','Educational','View size guide'],
+          [5,'Twitter/X','Text Post','“What feature do you wish stores showed before buying?”','Community/Engagement','Tweet your idea']
+        ],
+        "Real Estate": [
+          [1,'Instagram','Reel','60-sec walkthrough of a new listing with captions.','Promotional','Book a showing'],
+          [2,'Facebook','Carousel','Before/after staging transformation.','Educational','See the checklist'],
+          [3,'BlueSky','Text Post','“What’s your must-have in a new home?”','Community/Engagement','Comment below'],
+          [4,'YouTube','Tutorial Video','First-time buyers: 5 steps from pre-approval to keys.','Educational','Download the guide'],
+          [5,'Instagram','Story','Open house reminder with address and time.','Promotional','Add to calendar']
+        ],
+        "SaaS": [
+          [1,'LinkedIn','Image Post','Chart showing time saved using your workflow.','Educational','Start free trial'],
+          [2,'YouTube','Feature Demo Video','Deep dive on dashboard + analytics actions.','Promotional','Upgrade your plan'],
+          [3,'BlueSky','Poll','“Which feature matters most: calendar or analytics?”','Community/Engagement','Vote now'],
+          [4,'Twitter/X','Thread','Mini-tutorial thread: 3 shortcuts to schedule content.','Educational','Try it today'],
+          [5,'Facebook','Testimonial Video','Customer explains how they doubled output.','Promotional','Watch their story']
+        ],
+        "Med Spa": [
+          [1,'Instagram','Carousel','Before/after results with treatment names and care tips.','Educational','Book consultation'],
+          [2,'Facebook','Image Post','Limited-time package with inclusions listed.','Promotional','Claim the offer'],
+          [3,'BlueSky','Text Post','“Skin goals for fall: what’s yours?”','Community/Engagement','Share your goal'],
+          [4,'YouTube','Tutorial Video','Procedure explained: what to expect in 5 steps.','Educational','Watch the overview'],
+          [5,'Instagram','Story','Behind-the-scenes sterilization & safety standards.','Behind-the-Scenes','Follow for tips']
+        ],
+        "Fitness": [
+          [1,'Instagram','Reel','Trainer-led 3-move routine for busy pros.','Educational','Save this workout'],
+          [2,'Facebook','Image Post','Member spotlight: progress photo + quote.','Community/Engagement','Cheer them on'],
+          [3,'TikTok','Short Video','Gym tour with dynamic cuts set to trending audio.','Trending/Entertainment','Join now'],
+          [4,'YouTube','Tutorial Video','Meal prep 101: macros and portions.','Educational','Download meal plan'],
+          [5,'Instagram','Story','Class schedule for the week with stickers.','Promotional','Reserve a spot']
+        ],
+        "Nonprofit": [
+          [1,'Facebook','Image Post','Impact stat card (people served this month).','Educational','Donate today'],
+          [2,'Instagram','Carousel','Volunteer stories: quote per slide.','Community/Engagement','Sign up to volunteer'],
+          [3,'BlueSky','Text Post','“Which cause would you like us to cover next?”','Community/Engagement','Reply below'],
+          [4,'YouTube','Case Study Video','Program deep dive: outcomes & testimonials.','Educational','Watch the full story'],
+          [5,'Twitter/X','Text Post','Event countdown thread with milestones.','Promotional','Register now']
+        ],
+        "Marketing": [
+          [1,'LinkedIn','Image Post','Mini case: content calendar → +X% engagement.','Educational','Read the blog'],
+          [2,'Instagram','Carousel','5 content formats that convert this month.','Promotional','Try a template'],
+          [3,'BlueSky','Thread','“Share your best-performing post and why.”','Community/Engagement','Join the thread'],
+          [4,'YouTube','Tutorial Video','Repurposing framework: 1 idea → 5 assets.','Educational','Download the framework'],
+          [5,'Twitter/X','Text Post','Weekly tip: spark curiosity with “open loops.”','Educational','Apply this tip']
+        ],
+        "Trade (Lawncare / Carpentry / Roofing / Painting / Construction)": [
+          [1,'Facebook','Image Post','Before/after of a recent job with materials used.','Educational','Request a quote'],
+          [2,'Instagram','Reel','Time-lapse of a project from start to finish.','Trending/Entertainment','See more projects'],
+          [3,'BlueSky','Text Post','“What upgrade would you do first: deck, roof, or paint?”','Community/Engagement','Tell us below'],
+          [4,'YouTube','Tutorial Video','Homeowner tips: seasonal maintenance checklist.','Educational','Download the checklist'],
+          [5,'Instagram','Story','Meet-the-crew intro with certifications.','Behind-the-Scenes','Book a free estimate']
+        ]
+      };
+      return rows[business] || rows["General"];
+    }
+
     const headerFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE2F2FE'} };
     const zebraFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF8FAFC'} };
     const headerBorder = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
@@ -102,11 +198,11 @@
       }
     }
 
-    function addPlanSheet(wb) {
+    function addPlanSheet(wb, business) {
       const ws = wb.addWorksheet('5-Day Plan');
       ws.addRow(['Day','Platform','Content Type','Post Concept','Content Pillar','Call-to-Action']);
       ws.getRow(1).eachCell(cell=>{ cell.fill=headerFill; cell.font=bold; cell.border=headerBorder; cell.alignment={vertical:'middle'}; });
-      const rows = [[1, "Facebook", "Image Post", "Infographic highlighting how Board2Plan saves professionals 5+ hours weekly on social planning.", "Educational", "Learn more on our website"], [2, "Instagram", "Carousel", "Showcase subscription tiers, key benefits for each plan with clear visuals.", "Promotional", "Swipe up to start your free trial"], [3, "BlueSky", "Text Post", "\u201cWhat\u2019s your biggest challenge when planning social content? Let\u2019s discuss?\u201d", "Community/Engagement", "Share your planning challenges below"], [4, "YouTube", "Tutorial Video", "Step-by-step guide to setting up your first 30-day content plan in Board2Plan.", "Educational", "Subscribe and try it yourself"], [5, "YouTube", "YouTube Shorts", "Trending audio \u201cPlan with me\u201d quick snippet showing a calendar setup.", "Trending/Entertainment", "Check out Board2Plan via link in description"]];
+      const rows = planRowsFor(business);
       rows.forEach(r => ws.addRow(r));
       borderAll(ws, 1, ws.rowCount, 1, 6);
       applyZebra(ws, 2, ws.rowCount, 1, 6);
@@ -202,7 +298,7 @@
       const business = document.getElementById('business').value.trim() || 'General';
       const goal = document.getElementById('goal').value.trim() || 'Lead Generation';
 
-      addPlanSheet(wb);
+      addPlanSheet(wb, business);
       addAnalytics(wb);
       addBestPostTimes(wb);
       addAccounts(wb);
