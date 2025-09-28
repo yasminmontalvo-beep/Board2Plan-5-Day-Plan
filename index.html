@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Board2Plan – 5‑Day Marketing Plan (Trial)</title>
+  <title>Board2Plan – 5‑Day Marketing Plan (Final)</title>
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#22c55e">
@@ -16,8 +16,8 @@
     label { font-size: 13px; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
-    .input { width:100%; height:42px; padding:0 10px; border:1px solid #cbd5e1; border-radius:10px; font-size:14px; background:#fff; }
-    .input:focus { outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--ring); }
+    .input, select { width:100%; height:42px; padding:0 10px; border:1px solid #cbd5e1; border-radius:10px; font-size:14px; background:#fff; }
+    .input:focus, select:focus { outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--ring); }
     .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; height:46px; padding:0 18px; border-radius:9999px; border:0; font-weight:700; cursor:pointer; font-size:15px; }
     .btn-primary { background:var(--brand); color:#fff; }
     .btn-shop { background:var(--shop); color:#fff; }
@@ -28,8 +28,8 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>Board2Plan – 5‑Day Marketing Plan (Trial)</h1>
-    <p>Exports a clean Plan sheet plus Analytics (with totals + warning note), Best Post Times, Accounts (unlocked), and Keywords & Hashtags.</p>
+    <h1>Board2Plan – 5‑Day Marketing Plan</h1>
+    <p>Final merged build: Simple UI + Goal dropdown, and enhanced Excel (Analytics warning & totals, Best Post Times, Accounts unlocked, Keywords & Hashtags).</p>
     <div class="card">
       <div class="grid">
         <div>
@@ -37,8 +37,21 @@
           <input id="brand" class="input" value="Board2Plan" />
         </div>
         <div>
+          <label for="goal">Goal</label>
+          <select id="goal">
+            <option>Lead Generation</option>
+            <option>Sales / Conversions</option>
+            <option>Brand Awareness</option>
+            <option>Website Traffic</option>
+            <option>Engagement Growth</option>
+            <option>Event Promotion</option>
+            <option>Product Launch</option>
+            <option>Community Building</option>
+          </select>
+        </div>
+        <div>
           <label for="business">Business Type</label>
-          <select id="business" class="input">
+          <select id="business">
             <option>General</option>
             <option>Restaurant / Food</option>
             <option>Coaching / Consulting</option>
@@ -89,20 +102,19 @@
       }
     }
 
-    function addPlanSheet(wb, days) {
-      const title = days===5? '5-Day Plan' : '30-Day Plan';
-      const ws = wb.addWorksheet(title);
+    function addPlanSheet(wb) {
+      const ws = wb.addWorksheet('5-Day Plan');
       ws.addRow(['Day','Platform','Content Type','Post Concept','Content Pillar','Call-to-Action']);
       ws.getRow(1).eachCell(cell=>{ cell.fill=headerFill; cell.font=bold; cell.border=headerBorder; cell.alignment={vertical:'middle'}; });
-      const rows = [[1, "Facebook", "Image Post", "Infographic highlighting how Board2Plan saves professionals 5+ hours weekly on social planning.", "Educational", "Learn more on our website"], [2, "Instagram", "Carousel", "Showcase subscription tiers, key benefits for each plan with clear visuals.", "Promotional", "Swipe up to start your free trial"], [3, "BlueSky", "Text Post", "\u201cWhat\u2019s your biggest challenge when planning social content? Let\u2019s discuss?\u201d", "Community/Engagement", "Share your planning challenges below"], [4, "YouTube", "Tutorial Video", "Step-by-step guide to setting up your first 30-day content plan in Board2Plan.", "Educational", "Subscribe and try it yourself"], [5, "YouTube", "YouTube Shorts", "Trending audio \u201cPlan with me\u201d quick snippet showing a calendar setup.", "Trending/Entertainment", "Check out Board2Plan via link in description"], [6, "Facebook", "Video Testimonial", "Client describes how Board2Plan doubled their conversion rate.", "Promotional", "Watch the full story on our blog"], [7, "Instagram", "Story", "Tip of the week: best practices for a content calendar.", "Educational", "Screenshot and save this tip"], [8, "BlueSky", "Thread", "\u201cShare one win you achieved with your last social plan.\u201d", "Community/Engagement", "Reply with your success story"], [9, "YouTube", "Tutorial Video", "Three hacks to boost engagement using Board2Plan\u2019s analytics.", "Educational", "Download our free analytics guide"], [10, "Facebook", "Promotional Post", "Announce a 14-day free trial offer for new users.", "Promotional", "Sign up now"], [11, "Instagram", "Reel", "Behind-the-scenes look at our team planning a client\u2019s calendar.", "Behind-the-Scenes", "Follow for more insights"], [12, "BlueSky", "Infographic Post", "Key social planning statistics professionals need to know.", "Educational", "Bookmark for reference"], [13, "YouTube", "YouTube Shorts", "Launch \u201cPlan with me\u201d challenge for next week\u2019s content.", "Trending/Entertainment", "Join the challenge now"], [14, "Instagram", "Story with Swipe Up", "Reminder to subscribe and access premium templates.", "Promotional", "Swipe up to subscribe"], [15, "Facebook", "Article Link Post", "Share blog post on top 5 content calendar best practices.", "Educational", "Read the full article"], [16, "BlueSky", "Poll", "\u201cWhich feature matters most: calendar view or analytics dashboard?\u201d", "Community/Engagement", "Vote and comment why"], [17, "YouTube", "Case Study Video", "Deep dive into a professional\u2019s success story using Board2Plan.", "Educational", "Watch the full case study"], [18, "Instagram", "Image Post", "Influencer shares experience and a 20% off discount code.", "Promotional", "Use code PRO20 at checkout"], [19, "Facebook", "Live Stream", "Live Q&A on social planning strategies and tool features.", "Educational", "Join live and ask your questions"], [20, "YouTube", "YouTube Shorts", "Fun trending dance with Board2Plan interface overlays.", "Trending/Entertainment", "Try the app today"], [21, "Facebook", "Carousel", "Showcase five free plan templates professionals can download.", "Promotional", "Download your free template"], [22, "YouTube", "Webinar Trailer", "Teaser video for upcoming free \u201cMaster Your 30-Day Plan\u201d workshop.", "Educational", "Register for the webinar"], [23, "BlueSky", "Spotlight Post", "Feature a user success story with quotes and metrics.", "Community/Engagement", "Congratulate them and connect"], [24, "Instagram", "Image Post", "Limited seats available for an exclusive planning workshop.", "Promotional", "Reserve your spot now"], [25, "Facebook", "Resource Post", "Promote downloadable \u201cContent Calendar Checklist\u201d PDF.", "Educational", "Download the free checklist"], [26, "Instagram", "Reel", "Quick tutorial: adding and scheduling tasks in Board2Plan.", "Educational", "Watch and start your free trial"], [27, "YouTube", "Feature Demo Video", "Walkthrough of premium features and advanced analytics.", "Promotional", "Upgrade your plan today"], [28, "BlueSky", "Feedback Thread", "Ask for feature requests and user feedback.", "Community/Engagement", "Share your ideas"], [29, "Facebook", "Tip Post", "Five tips to measure ROI on your social campaigns.", "Educational", "Read more on our blog"], [30, "Instagram", "Image Post", "Final reminder: free trial ending soon\u2014don\u2019t miss out.", "Promotional", "Start your trial before it ends"]];
-      (days===5 ? rows.slice(0,5) : rows).forEach(r => ws.addRow(r));
+      const rows = [[1, "Facebook", "Image Post", "Infographic highlighting how Board2Plan saves professionals 5+ hours weekly on social planning.", "Educational", "Learn more on our website"], [2, "Instagram", "Carousel", "Showcase subscription tiers, key benefits for each plan with clear visuals.", "Promotional", "Swipe up to start your free trial"], [3, "BlueSky", "Text Post", "\u201cWhat\u2019s your biggest challenge when planning social content? Let\u2019s discuss?\u201d", "Community/Engagement", "Share your planning challenges below"], [4, "YouTube", "Tutorial Video", "Step-by-step guide to setting up your first 30-day content plan in Board2Plan.", "Educational", "Subscribe and try it yourself"], [5, "YouTube", "YouTube Shorts", "Trending audio \u201cPlan with me\u201d quick snippet showing a calendar setup.", "Trending/Entertainment", "Check out Board2Plan via link in description"]];
+      rows.forEach(r => ws.addRow(r));
       borderAll(ws, 1, ws.rowCount, 1, 6);
       applyZebra(ws, 2, ws.rowCount, 1, 6);
       ws.columns = [{ width:8 }, { width:16 }, { width:22 }, { width:80 }, { width:28 }, { width:32 }];
       return ws;
     }
 
-    function addAnalytics(wb, days) {
+    function addAnalytics(wb) {
       const ws = wb.addWorksheet('Analytics');
       ws.addRow(['⚠️ Reminder: If you add login info in the Accounts tab, do not share this workbook.']);
       ws.mergeCells(1,1,1,11);
@@ -111,25 +123,25 @@
       ws.addRow(['Day','Week','Platform','Content','Impressions','Clicks','Likes','Comments','Shares','Saves','Status']);
       ws.getRow(2).eachCell(c=>{ c.fill=headerFill; c.font=bold; c.border=headerBorder; c.alignment={vertical:'middle'}; });
 
-      for (let i=0;i<(days);i++) ws.addRow([i+1, Math.floor(i/7)+1, '', '', '', '', '', '', '', '', 'Not Started']);
-      for (let r=3; r<=days+2; r++) {
+      for (let i=0;i<5;i++) ws.addRow([i+1, 1, '', '', '', '', '', '', '', '', 'Not Started']);
+      for (let r=3; r<=7; r++) {
         ws.getCell(`K${r}`).dataValidation = {
           type: 'list',
           allowBlank: true,
           formulae: ['"Not Started,In Progress,Scheduled,Published,Complete"']
         };
       }
-      const t = days + 3;
+      const t = 8;
       ws.getCell(`A${t}`).value = 'Totals';
       ws.getCell(`A${t}`).font = {bold:true};
-      ws.getCell(`E${t}`).value = {formula:`SUM(E3:E${days+2})`};
-      ws.getCell(`F${t}`).value = {formula:`SUM(F3:F${days+2})`};
-      ws.getCell(`G${t}`).value = {formula:`SUM(G3:G${days+2})`};
-      ws.getCell(`H${t}`).value = {formula:`SUM(H3:H${days+2})`};
-      ws.getCell(`I${t}`).value = {formula:`SUM(I3:I${days+2})`};
-      ws.getCell(`J${t}`).value = {formula:`SUM(J3:J${days+2})`};
+      ws.getCell(`E${t}`).value = {formula:`SUM(E3:E7)`};
+      ws.getCell(`F${t}`).value = {formula:`SUM(F3:F7)`};
+      ws.getCell(`G${t}`).value = {formula:`SUM(G3:G7)`};
+      ws.getCell(`H${t}`).value = {formula:`SUM(H3:H7)`};
+      ws.getCell(`I${t}`).value = {formula:`SUM(I3:I7)`};
+      ws.getCell(`J${t}`).value = {formula:`SUM(J3:J7)`};
       borderAll(ws,1,t,1,11);
-      applyZebra(ws,3,days+2,1,11);
+      applyZebra(ws,3,7,1,11);
       ws.views = [{state:'frozen', ySplit:2}];
       return ws;
     }
@@ -164,14 +176,14 @@
       ['Instagram','Facebook','LinkedIn','TikTok','YouTube','Twitter/X','Pinterest'].forEach(p=>ws.addRow([p,'','','']));
       borderAll(ws,1,9,1,4);
       ws.columns = [{width:16},{width:28},{width:22},{width:28}];
-      // No sheet protection — fully editable
       return ws;
     }
 
     function addKeywords(wb, brand, business) {
       const ws = wb.addWorksheet('Keywords & Hashtags');
       const bt = (business||'General').toLowerCase();
-      ws.addRow(['Primary Keywords', `${bt} marketing`, `${bt} tips`, `${bt} content`, `${brand} ${bt}`]);
+      const brandLower = (brand||'').toLowerCase();
+      ws.addRow(['Primary Keywords', `${bt} marketing`, `${bt} tips`, `${bt} content`, `${brandLower} ${bt}`]);
       const tag = bt.replace(/\W+/g,'');
       ws.addRow(['Hashtag Seeds', `#${tag}`, '#contentmarketing', '#smallbusiness', '#growth', '#marketingplan']);
       ws.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=bold; c.border=headerBorder; });
@@ -181,16 +193,17 @@
       return ws;
     }
 
-    async function buildWorkbook(days) {
+    async function buildWorkbook() {
       const wb = new ExcelJS.Workbook();
       wb.creator = 'Board2Plan';
       wb.created = new Date();
 
       const brand = document.getElementById('brand').value.trim() || 'Board2Plan';
       const business = document.getElementById('business').value.trim() || 'General';
+      const goal = document.getElementById('goal').value.trim() || 'Lead Generation';
 
-      addPlanSheet(wb, days);
-      addAnalytics(wb, days);
+      addPlanSheet(wb);
+      addAnalytics(wb);
       addBestPostTimes(wb);
       addAccounts(wb);
       addKeywords(wb, brand, business);
@@ -202,7 +215,7 @@
       const a = document.createElement('a'); a.href=url; a.download=fname; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
 
-    document.getElementById('download').addEventListener('click', () => buildWorkbook(5));
+    document.getElementById('download').addEventListener('click', buildWorkbook);
   </script>
 </body>
 </html>
