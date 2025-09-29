@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>5‑Day Plan Generator (v3)</title>
+  <style>
+    :root{--teal:#008080;--ink:#111;--line:#e6eaee;--soft:#f6f8f9}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink)}
+    header{background:#fff;border-bottom:1px solid var(--line)}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    h1{font-size:22px;margin:0}
+    .sub{font-size:12px;color:#666}
+    .panel{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--soft)}
+    .grid{display:grid;gap:12px}
+    .cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}
+    button{padding:10px 12px;border:1px solid var(--line);border-radius:999px;cursor:pointer;background:#3b82f6;color:#fff;font-weight:600}
+    .ghost{background:#fff;color:#222}
+    table{width:100%;border-collapse:separate;border-spacing:0;margin-top:8px}
+    th{ text-align:left;padding:8px;border-bottom:2px solid var(--line);font-size:12px;color:#444}
+    td{ padding:8px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}
+    @media (max-width:1200px){.cols-5{grid-template-columns:1fr 1fr 1fr}}
+    @media (max-width:800px){.cols-5{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>5‑Day Plan Generator</h1>
+      <div class="sub">Brand (optional) + Business Type + Goal + Tone → Generate → Export</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel">
+      <div class="grid cols-5">
+        <div>
+          <label for="brand">Brand (optional)</label>
+          <input id="brand" placeholder="e.g., Acme Realty" />
+        </div>
+        <div>
+          <label for="bizType">Business Type</label>
+          <select id="bizType">
+            <option>Restaurant</option>
+            <option>Home Services / Trades</option>
+            <option>Real Estate</option>
+            <option>Beauty / Salon</option>
+            <option>E-commerce Retail</option>
+            <option>Professional Services</option>
+            <option>Nonprofit / Community</option>
+            <option>Travel & Hospitality</option>
+            <option>Healthcare / Wellness</option>
+            <option>Education / Coaching</option>
+            <option>Fitness</option>
+            <option>Automotive</option>
+            <option>Events / Venues</option>
+            <option>Tech / SaaS</option>
+            <option>Legal Services</option>
+            <option>Financial Services</option>
+          </select>
+        </div>
+        <div>
+          <label for="goal">Goal</label>
+          <select id="goal">
+            <option>Lead Generation</option>
+            <option>Engagement</option>
+            <option>Awareness</option>
+            <option>Sales</option>
+          </select>
+        </div>
+        <div>
+          <label for="tone">Content Tone</label>
+          <select id="tone">
+            <option>Educational</option>
+            <option>Promotional</option>
+            <option>Community</option>
+            <option>Behind the Scenes</option>
+            <option>Trend-Driven</option>
+          </select>
+        </div>
+        <div>
+          <label for="startDate">Start Date (Day 1)</label>
+          <input type="date" id="startDate" />
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button id="generate">Generate / Refresh Plan</button>
+        <button id="exportCSV" class="ghost">Export CSV</button>
+        <button id="downloadXLS" class="ghost">Download Workbook (.xls)</button>
+        <button id="print" class="ghost">Print / Save PDF</button>
+      </div>
+    </section>
+
+    <table id="table5"></table>
+  </main>
+
+  <script>
+    const columns = ["Day","Date","Platform","Content Type","Post Concept","Content Pillar","Call to Action","Primary Hashtags","Link / UTM","Asset","Status","Notes","Best Post Time"];
+
+    const BestTimesDefault = {"Instagram":"11:00 AM","Instagram Stories":"10:00 AM","Facebook":"12:00 PM","LinkedIn":"9:00 AM","TikTok":"7:30 PM","YouTube Shorts":"6:00 PM","Twitter/X":"1:00 PM","Pinterest":"8:00 PM"};
+    const BestTimesByIndustry = {
+      "Restaurant": {"Instagram":"1:00 PM","Instagram Stories":"11:30 AM","Facebook":"12:30 PM","TikTok":"8:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:00 PM"},
+      "Home Services / Trades": {"Facebook":"6:30 PM","LinkedIn":"8:30 AM","Instagram":"12:00 PM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM"},
+      "Real Estate": {"Instagram":"12:30 PM","Facebook":"1:00 PM","LinkedIn":"8:30 AM","TikTok":"7:30 PM","YouTube Shorts":"6:30 PM"},
+      "Beauty / Salon": {"Instagram":"1:30 PM","Instagram Stories":"10:30 AM","TikTok":"8:30 PM","YouTube Shorts":"7:30 PM","Pinterest":"9:30 PM"},
+      "E-commerce Retail": {"Instagram":"12:00 PM","Facebook":"1:00 PM","TikTok":"9:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:30 PM"},
+      "Professional Services": {"LinkedIn":"8:00 AM","Twitter/X":"12:00 PM","Instagram":"1:00 PM","YouTube Shorts":"6:00 PM"},
+      "Nonprofit / Community": {"Facebook":"12:30 PM","Instagram":"1:00 PM","Instagram Stories":"11:00 AM","TikTok":"8:00 PM"},
+      "Travel & Hospitality": {"Instagram":"11:30 AM","Facebook":"12:00 PM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM","Pinterest":"8:30 PM"},
+      "Healthcare / Wellness": {"Facebook":"12:00 PM","Instagram":"11:30 AM","LinkedIn":"9:00 AM","TikTok":"7:30 PM"},
+      "Education / Coaching": {"LinkedIn":"8:30 AM","Instagram":"12:30 PM","YouTube Shorts":"6:30 PM","TikTok":"8:30 PM"},
+      "Fitness": {"Instagram":"11:30 AM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM","Instagram Stories":"9:30 AM"},
+      "Automotive": {"Facebook":"12:30 PM","Instagram":"1:00 PM","YouTube Shorts":"6:30 PM","TikTok":"8:00 PM"},
+      "Events / Venues": {"Instagram":"12:30 PM","Facebook":"1:00 PM","TikTok":"8:30 PM","Instagram Stories":"10:30 AM"},
+      "Tech / SaaS": {"LinkedIn":"8:30 AM","Twitter/X":"12:30 PM","YouTube Shorts":"6:00 PM"},
+      "Legal Services": {"LinkedIn":"8:30 AM","Facebook":"12:30 PM","Instagram":"1:00 PM"},
+      "Financial Services": {"LinkedIn":"8:30 AM","Twitter/X":"12:30 PM","Instagram":"12:30 PM","YouTube Shorts":"6:30 PM"}
+    };
+    function getBestTimes(biz){ return Object.assign({}, BestTimesDefault, BestTimesByIndustry[biz]||{}); }
+    function bestPostTime(platform,biz){ const t=getBestTimes(biz); return t[platform]||"11:30 AM"; }
+
+    const PlatformOrder = ["Instagram","Facebook","LinkedIn","TikTok","YouTube Shorts","Instagram Stories","Twitter/X","Pinterest"];
+    const IdeaLib = {
+      "Real Estate":[
+        {concept:"New listing carousel: highlights + neighborhood",pillar:"Promotional",hashtags:"#NewListing #OpenHouse #DreamHome",cta:"Book a showing",platforms:["Instagram","Facebook","LinkedIn"]},
+        {concept:"Market update chart (median price)",pillar:"Educational",hashtags:"#MarketUpdate #RealEstateTips #LocalStats",cta:"Get your home value",platforms:["LinkedIn","Facebook"]},
+        {concept:"Client success story with keys photo",pillar:"Community",hashtags:"#Sold #JustClosed #HappyHome",cta:"Start your search",platforms:["Instagram","Facebook"]},
+        {concept:"Neighborhood guide (schools, parks, coffee)",pillar:"Educational",hashtags:"#NeighborhoodGuide #LocalLove #Relocation",cta:"Download the guide",platforms:["Instagram","LinkedIn"]},
+        {concept:"Open house reel w/ date & CTA",pillar:"Promotional",hashtags:"#OpenHouse #TourToday #RealEstate",cta:"RSVP for the tour",platforms:["Instagram","Facebook"]}
+      ],
+      "Restaurant":[
+        {concept:"Chef special spotlight with ingredient origin",pillar:"Educational",hashtags:"#LocalEats #ChefSpecial #Foodie",cta:"Reserve a table",platforms:["Instagram","Facebook","TikTok"]},
+        {concept:"Happy hour carousel with price callouts",pillar:"Promotional",hashtags:"#HappyHour #DrinksDeal #AfterWork",cta:"Book now",platforms:["Instagram","Facebook"]},
+        {concept:"Behind-the-scenes prep time-lapse",pillar:"Behind the Scenes",hashtags:"#KitchenLife #MadeFresh #BTS",cta:"See today’s menu",platforms:["TikTok","Instagram"]},
+        {concept:"Customer review quote graphic",pillar:"Community",hashtags:"#CustomerLove #ThankYou #5Stars",cta:"Leave a review",platforms:["Instagram","Facebook"]},
+        {concept:"Limited menu drop with countdown",pillar:"Trend-Driven",hashtags:"#LimitedTime #FoodLaunch #Countdown",cta:"Order online",platforms:["Instagram Stories","Facebook"]}
+      ],
+      "Professional Services":[
+        {concept:"3-step framework carousel",pillar:"Frameworks",hashtags:"#Framework #B2B #Operations",cta:"Book a consult",platforms:["LinkedIn","Instagram"]},
+        {concept:"Case study metric highlight",pillar:"Case studies",hashtags:"#CaseStudy #ROI #Outcome",cta:"See case study",platforms:["LinkedIn","Twitter/X"]},
+        {concept:"Free audit promo with lead form",pillar:"Promotions",hashtags:"#Audit #FreeCheck #Consulting",cta:"DM 'AUDIT'",platforms:["LinkedIn","Instagram"]},
+        {concept:"Founder POV: one tip in 30s",pillar:"Education",hashtags:"#Leadership #Ops #Clarity",cta:"Download checklist",platforms:["LinkedIn","YouTube Shorts"]}
+      ]
+    };
+
+    const slug = s => String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    function formatDate(base,add){const d=new Date(base);d.setDate(d.getDate()+add);return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'})}
+    function pickPlatform(idea,i){return Array.isArray(idea.platforms)&&idea.platforms.length?idea.platforms[i%idea.platforms.length]:PlatformOrder[i%PlatformOrder.length]}
+    function buildLinkUTM(platform,biz,goal,dayIndex,brand){
+      const src = String(platform||'').toLowerCase().replace(/\s+/g,'_').replace(/\//g,'_');
+      const camp = `${slug(biz)}_${slug(goal)}`;
+      const content = `day${dayIndex+1}-${slug(platform)}`;
+      const extra = brand ? `&utm_brand=${encodeURIComponent(brand)}` : '';
+      return `https://example.com?utm_source=${src}&utm_medium=social&utm_campaign=${camp}&utm_content=${content}${extra}`;
+    }
+    function planRow(i,date,idea,platform,biz,goal,brand){
+      const map={"Instagram":"Image / Reel","Instagram Stories":"Stories (3-5 slides)","Facebook":"Image / Carousel","LinkedIn":"Carousel / Text Post","TikTok":"Short-form Video","YouTube Shorts":"Short-form Video","Twitter/X":"Text + Image","Pinterest":"Idea Pin"};
+      return {"Day":`Day ${i+1}`,"Date":date,"Platform":platform,"Content Type":map[platform]||"Post","Post Concept":idea.concept,"Content Pillar":idea.pillar,"Call to Action":idea.cta,"Primary Hashtags":idea.hashtags,"Link / UTM":buildLinkUTM(platform,biz,goal,i,brand),"Asset":"TBD","Status":"Planned","Notes":"","Best Post Time":bestPostTime(platform,biz)};
+    }
+    function buildPlan(total){
+      const biz=document.getElementById('bizType').value;
+      const goal=document.getElementById('goal').value;
+      const brand=(document.getElementById('brand').value||'').trim();
+      const startInput=document.getElementById('startDate').value;
+      const start=startInput?new Date(startInput):new Date();
+      const ideas=IdeaLib[biz] || IdeaLib["Professional Services"];
+      const rows=[];
+      for(let i=0;i<total;i++){
+        const idea=ideas[i%ideas.length];
+        const platform=pickPlatform(idea,i);
+        const date=formatDate(start,i);
+        rows.push(planRow(i,date,idea,platform,biz,goal,brand));
+      }
+      return rows;
+    }
+    function renderTable(id,rows){
+      const table=document.getElementById(id);
+      const thead=`<thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead>`;
+      const body=rows.map(r=>`<tr>${columns.map(c=>`<td>${(r[c]??'')}</td>`).join('')}</tr>`).join('');
+      table.innerHTML=thead+`<tbody>${body}</tbody>`;
+    }
+    function toCSV(rows){
+      const header=columns.join(',');
+      const esc=v=>'"'+String(v).replaceAll('"','""')+'"';
+      const body=rows.map(r=>columns.map(c=>esc(r[c]??'')).join(',')).join('\n');
+      return header+'\n'+body;
+    }
+
+    function excelCell(v){const s=String(v==null?"":v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');return `<Cell><Data ss:Type=\"String\">${s}</Data></Cell>`;}
+    function excelRow(arr){ return `<Row>${arr.map(excelCell).join('')}</Row>`; }
+    function buildWorkbookXML(planRows,biz,tone,goal,brand){
+      const top = brand ? `Brand: ${brand} | ` : '';
+      const noteRow = excelRow([`${top}Business Type: ${biz} | Goal: ${goal} | Tone: ${tone}`]);
+      const headerRow = excelRow(columns);
+      const planXml = noteRow + headerRow + planRows.map(r=>excelRow(columns.map(c=>r[c]??''))).join('');
+
+      const ideas = IdeaLib[biz] || [];
+      const kwRows = [excelRow(['Concept','Pillar','Hashtags'])].concat(ideas.map(it=>excelRow([it.concept,it.pillar,it.hashtags])));
+      const kwXml = kwRows.join('');
+
+      const analyticsCols = ['Date','Platform','Post URL','Impressions','Reach','Engagements','Saves','Clicks','Notes'];
+      const analyticsXml = excelRow(analyticsCols);
+
+      const bptCols = ['Platform','Best Post Time'];
+      const times = getBestTimes(biz);
+      const bptXml = [excelRow(bptCols)].concat(Object.keys(times).map(p=>excelRow([p,times[p]]))).join('');
+
+      const acctCols = ['Platform','Handle','URL','Notes'];
+      const acctXml = excelRow(acctCols);
+
+      const xml = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+  <Worksheet ss:Name="5-Day Plan"><Table>${planXml}</Table></Worksheet>
+  <Worksheet ss:Name="Keywords & Hashtags"><Table>${kwXml}</Table></Worksheet>
+  <Worksheet ss:Name="Analytics"><Table>${analyticsXml}</Table></Worksheet>
+  <Worksheet ss:Name="Best Post Times"><Table>${bptXml}</Table></Worksheet>
+  <Worksheet ss:Name="Accounts"><Table>${acctXml}</Table></Worksheet>
+</Workbook>`;
+      return xml;
+    }
+    function downloadXLS(filename, xml){
+      const blob = new Blob([xml], {type: 'application/vnd.ms-excel'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+    }
+    function refresh(){
+      const biz=document.getElementById('bizType').value; 
+      const tone=document.getElementById('tone').value;
+      const goal=document.getElementById('goal').value;
+      const brand=(document.getElementById('brand').value||'').trim();
+      const rows = buildPlan(5);
+      renderTable('table5', rows);
+      document.getElementById('exportCSV').onclick=()=>{
+        const csv=toCSV(rows);
+        const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='5Day.csv'; a.click();
+      };
+      const sf = s => String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+      const fname = `5Day_${sf(brand||'brand')}_${sf(biz)}_${sf(goal)}.xls`;
+      document.getElementById('downloadXLS').onclick=()=>downloadXLS(fname, buildWorkbookXML(rows,biz,tone,goal,brand));
+    }
+    document.getElementById('generate').addEventListener('click', refresh);
+    document.getElementById('print').addEventListener('click',()=>window.print());
+    refresh();
+  </script>
+</body>
+</html>
