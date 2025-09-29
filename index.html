@@ -3,319 +3,206 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Board2Plan – 5-Day Marketing Plan (Trial)</title>
+  <title>Board2Plan – 5‑Day Marketing Plan (Trial)</title>
   <link rel="icon" type="image/png" href="./favicon.png">
-  <link rel="apple-touch-icon" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#22c55e">
-  <meta property="og:title" content="Board2Plan – 5-Day Marketing Plan (Trial)">
-  <meta property="og:description" content="Structured marketing plan in Excel with daily tasks, hashtags, analytics (with totals), best post times, and an accounts tracker.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="og-image.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Board2Plan – 5-Day Marketing Plan (Trial)">
-  <meta name="twitter:description" content="Structured marketing plan in Excel with daily tasks, hashtags, best post times, and an accounts tracker.">
-  <meta name="twitter:image" content="og-image.png">
   <style>
     :root { --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --ring:#bae6fd; --shop:#22c55e; }
-    * { box-sizing: border-box; }
-    body { margin:0; background:#f8fafc; color:var(--ink); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 0; }
-    .hero { background: linear-gradient(135deg, #0ea5e9, #22c55e); color:#fff; text-align:center; padding:68px 20px; border-radius:0 0 24px 24px; }
-    .hero h1 { font-size: 46px; margin: 0 0 14px; font-weight: 800; }
-    .hero p { font-size:20px; margin:0; opacity:.95; }
-    .content { padding: 28px; }
-    .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; box-shadow:0 2px 8px rgba(2,6,23,.04); text-align:left; }
-    .card-body { padding:20px; display:grid; gap:16px; grid-template-columns: 1fr 1fr; }
-    @media (max-width: 720px){ .card-body { grid-template-columns: 1fr; } }
-    label { font-size:13px; }
-    .input, select {
-      width:100%; height:42px; padding:0 10px; border:1px solid #cbd5e1; border-radius:10px; font-size:14px; background:#fff; color:var(--ink);
-    }
-    .input:focus, select:focus { outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--ring); }
+    body { margin:0; background:#f8fafc; color:var(--ink); font-family: Inter, system-ui, Segoe UI, Roboto, Arial; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 28px; }
+    h1 { font-size: 32px; margin: 0 0 8px; }
+    p { margin: 0 0 16px; color: var(--muted); }
+    label { font-size: 13px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    .input { width:100%; height:42px; padding:0 10px; border:1px solid #cbd5e1; border-radius:10px; font-size:14px; background:#fff; }
+    .input:focus { outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--ring); }
     .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; height:46px; padding:0 18px; border-radius:9999px; border:0; font-weight:700; cursor:pointer; font-size:15px; }
     .btn-primary { background:var(--brand); color:#fff; }
-    .btn-shop { background:var(--shop); color:#fff; border:0; }
-    .btn-shop:hover { background:#16a34a; }
-    .actions { grid-column:1 / -1; display:grid; gap:12px; }
-    .promo { margin-top:28px; padding:20px; border:1px solid #e5e7eb; border-radius:16px; background:#fff; box-shadow:0 2px 8px rgba(2,6,23,.04); }
-    .promo h2 { margin:0 0 10px; font-size:26px; }
-    .promo p { color:var(--muted); margin:0 0 16px; line-height:1.5; }
-    .small { font-size:12px; color:var(--muted); margin-top:8px; }
-    .foot { text-align:center; color:var(--muted); font-size:12px; padding:24px 0 36px; }
-    .foot a { color:#22c55e; text-decoration:none; font-weight:600; }
+    .btn-shop { background:var(--shop); color:#fff; }
+    .actions { display:grid; gap:10px; margin-top:8px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:16px; box-shadow:0 2px 8px rgba(2,6,23,.04); }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 </head>
 <body>
   <div class="wrap">
-    <div class="hero">
-      <h1>📅 Board2Plan – 5-Day Marketing Plan (Trial)</h1>
-      <p>Create a structured plan with daily tasks, keywords/hashtags, analytics, best post times, and an accounts tracker.</p>
-    </div>
-
-    <div class="content">
-      <div class="card">
-        <div class="card-body">
-          <div>
-            <label for="brand">Brand</label>
-            <input id="brand" class="input" value="Board2Plan" />
-          </div>
-          <div>
-            <label for="goal">Goal</label>
-            <select id="goal" class="input">
-              <option>Lead Generation</option>
-              <option>Brand Awareness</option>
-              <option>Engagement Growth</option>
-              <option>Website Traffic</option>
-              <option>Sales / Conversions</option>
-              <option>Customer Retention</option>
-              <option>Event Promotion</option>
-              <option>Product Launch</option>
-              <option>Community Building</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div>
-            <label for="business">Business Type</label>
-            <select id="business" class="input">
-              <option>General</option>
-              <option>Restaurant / Food</option>
-              <option>Coaching / Consulting</option>
-              <option>Ecommerce / Shop</option>
-              <option>Real Estate</option>
-              <option>SaaS</option>
-              <option>Med Spa</option>
-              <option>Fitness</option>
-              <option>Nonprofit</option>
-              <option>Marketing</option>
-              <option>Trade (Lawncare / Carpentry / Roofing / Painting / Construction)</option>
-            </select>
-          </div>
-          <div>
-            <label for="file">Output file name</label>
-            <input id="file" class="input" value="5Day_Marketing_Plan.xlsx" />
-          </div>
-
-          <div class="actions">
-            <button id="download" class="btn btn-primary">⬇️ Download Excel</button>
-            <a href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener">
-              <button class="btn btn-shop" style="width:100%;">🛒 Buy on Shopify</button>
-            </a>
-          </div>
-          <div class="small">Sheets: Plan, Keywords & Hashtags, Analytics (with Totals), Best Post Times, Accounts.</div>
+    <h1>Board2Plan – 5‑Day Marketing Plan (Trial)</h1>
+    <p>Exports a clean Plan sheet plus Analytics (with totals + warning note), Best Post Times, Accounts (unlocked), and Keywords & Hashtags.</p>
+    <div class="card">
+      <div class="grid">
+        <div>
+          <label for="brand">Brand</label>
+          <input id="brand" class="input" value="Board2Plan" />
+        </div>
+        <div>
+          <label for="business">Business Type</label>
+          <select id="business" class="input">
+            <option>General</option>
+            <option>Restaurant / Food</option>
+            <option>Coaching / Consulting</option>
+            <option>Ecommerce / Shop</option>
+            <option>Real Estate</option>
+            <option>SaaS</option>
+            <option>Med Spa</option>
+            <option>Fitness</option>
+            <option>Nonprofit</option>
+            <option>Marketing</option>
+            <option>Trade (Lawncare / Carpentry / Roofing / Painting / Construction)</option>
+          </select>
+        </div>
+        <div>
+          <label for="file">Output file name</label>
+          <input id="file" class="input" value="Board2Plan_Campaign_5Day.xlsx" />
         </div>
       </div>
-    </div>
-
-    <div class="promo">
-      <h2>Your Content Plan, Done.</h2>
-      <p>Choose the 5-Day Trial or go all-in with the 30-Day Full Plan — complete with prompts, hashtags, analytics, best post times, and an accounts sheet.</p>
-      <a href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener"><button class="btn btn-shop">Buy Now on Shopify</button></a>
-      <div class="small">One-time purchase. Instant download.</div>
-    </div>
-
-    <div class="foot">
-      © Board2Plan · 
-      <a href="mailto:yourname@example.com?subject=Board2Plan%20Support&body=Hello%20Board2Plan%20Team,%0D%0A%0D%0AI%20need%20help%20with%20my%20Marketing%20Plan.%20Here%20are%20the%20details:%0D%0A- Brand:%20%0D%0A- Goal:%20%0D%0A- Business%20Type:%20%0D%0A%0D%0AThank%20you!" target="_blank">
-        Need help?
-      </a>
+      <div class="actions">
+        <button id="download" class="btn btn-primary">⬇️ Download Excel</button>
+        <a href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener"><button class="btn btn-shop">🛒 Buy on Shopify</button></a>
+      </div>
     </div>
   </div>
 
   <script>
-    const byId = (id) => document.getElementById(id);
+    const headerFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE2F2FE'} };
+    const zebraFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF8FAFC'} };
+    const headerBorder = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+    const bold = { bold:true };
 
-    function generateBusinessTasks(businessType){
-      const mk = (name,tasks)=>({name,tasks});
-      const lower = (businessType||'general').toLowerCase();
-      const promoTrade = ['Before/After project post','Seasonal service promo','Safety & compliance spotlight','Neighborhood spotlight'];
-      const promoEcom  = ['New arrival showcase','Bundle/upsell post','UGC product feature','Limited-time offer'];
-      const promoLocal = ['Local event tie-in','Staff spotlight','Testimonial highlight','Offer of the week'];
-      const promo = lower.includes('trade') ? promoTrade
-                  : lower.includes('ecommerce') ? promoEcom
-                  : promoLocal;
-      return [
-        mk('Education',['Share an industry tip','Post a how-to guide','Explain a key term','Repurpose a blog','Common mistakes + fixes','Mini case study']),
-        mk('Engagement',['Run a poll','Ask a question','This or That','Hot take + invite replies','Host a Q&A','Comment-to-DM prompt']),
-        mk('Promotion', promo),
-        mk('Storytelling',['Founder story','Behind-the-scenes','Customer journey','Origin story','Milestone','Values/mission post'])
-      ];
-    }
-
-    function zebraFill(worksheet, startRow, endRow, startCol, endCol) {
-      for (let r = startRow; r <= endRow; r++) {
-        if ((r % 2) === 0) {
-          for (let c = startCol; c <= endCol; c++) {
-            worksheet.getCell(r, c).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF8FAFC'} };
-          }
-        }
-      }
-    }
-
-    function borderAll(worksheet, startRow, endRow, startCol, endCol) {
-      const border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
-      for (let r = startRow; r <= endRow; r++) {
-        for (let c = startCol; c <= endCol; c++) {
-          const cell = worksheet.getCell(r, c);
-          cell.border = border;
+    function borderAll(ws, r1, r2, c1, c2) {
+      const b = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+      for (let r=r1; r<=r2; r++) {
+        for (let c=c1; c<=c2; c++) {
+          const cell = ws.getCell(r,c);
+          cell.border = b;
           cell.alignment = { vertical:'top', wrapText:true };
         }
       }
     }
 
-    async function buildWorkbook(days, brand, goal, businessType, fname) {
-      const ExcelJS = window.ExcelJS;
+    function applyZebra(ws, r1, r2, c1, c2) {
+      for (let r=r1; r<=r2; r++) {
+        if (r % 2 === 0) {
+          for (let c=c1; c<=c2; c++) ws.getCell(r,c).fill = zebraFill;
+        }
+      }
+    }
+
+    function addPlanSheet(wb, days) {
+      const title = days===5? '5-Day Plan' : '30-Day Plan';
+      const ws = wb.addWorksheet(title);
+      ws.addRow(['Day','Platform','Content Type','Post Concept','Content Pillar','Call-to-Action']);
+      ws.getRow(1).eachCell(cell=>{ cell.fill=headerFill; cell.font=bold; cell.border=headerBorder; cell.alignment={vertical:'middle'}; });
+      const rows = [[1, "Facebook", "Image Post", "Infographic highlighting how Board2Plan saves professionals 5+ hours weekly on social planning.", "Educational", "Learn more on our website"], [2, "Instagram", "Carousel", "Showcase subscription tiers, key benefits for each plan with clear visuals.", "Promotional", "Swipe up to start your free trial"], [3, "BlueSky", "Text Post", "\u201cWhat\u2019s your biggest challenge when planning social content? Let\u2019s discuss?\u201d", "Community/Engagement", "Share your planning challenges below"], [4, "YouTube", "Tutorial Video", "Step-by-step guide to setting up your first 30-day content plan in Board2Plan.", "Educational", "Subscribe and try it yourself"], [5, "YouTube", "YouTube Shorts", "Trending audio \u201cPlan with me\u201d quick snippet showing a calendar setup.", "Trending/Entertainment", "Check out Board2Plan via link in description"], [6, "Facebook", "Video Testimonial", "Client describes how Board2Plan doubled their conversion rate.", "Promotional", "Watch the full story on our blog"], [7, "Instagram", "Story", "Tip of the week: best practices for a content calendar.", "Educational", "Screenshot and save this tip"], [8, "BlueSky", "Thread", "\u201cShare one win you achieved with your last social plan.\u201d", "Community/Engagement", "Reply with your success story"], [9, "YouTube", "Tutorial Video", "Three hacks to boost engagement using Board2Plan\u2019s analytics.", "Educational", "Download our free analytics guide"], [10, "Facebook", "Promotional Post", "Announce a 14-day free trial offer for new users.", "Promotional", "Sign up now"], [11, "Instagram", "Reel", "Behind-the-scenes look at our team planning a client\u2019s calendar.", "Behind-the-Scenes", "Follow for more insights"], [12, "BlueSky", "Infographic Post", "Key social planning statistics professionals need to know.", "Educational", "Bookmark for reference"], [13, "YouTube", "YouTube Shorts", "Launch \u201cPlan with me\u201d challenge for next week\u2019s content.", "Trending/Entertainment", "Join the challenge now"], [14, "Instagram", "Story with Swipe Up", "Reminder to subscribe and access premium templates.", "Promotional", "Swipe up to subscribe"], [15, "Facebook", "Article Link Post", "Share blog post on top 5 content calendar best practices.", "Educational", "Read the full article"], [16, "BlueSky", "Poll", "\u201cWhich feature matters most: calendar view or analytics dashboard?\u201d", "Community/Engagement", "Vote and comment why"], [17, "YouTube", "Case Study Video", "Deep dive into a professional\u2019s success story using Board2Plan.", "Educational", "Watch the full case study"], [18, "Instagram", "Image Post", "Influencer shares experience and a 20% off discount code.", "Promotional", "Use code PRO20 at checkout"], [19, "Facebook", "Live Stream", "Live Q&A on social planning strategies and tool features.", "Educational", "Join live and ask your questions"], [20, "YouTube", "YouTube Shorts", "Fun trending dance with Board2Plan interface overlays.", "Trending/Entertainment", "Try the app today"], [21, "Facebook", "Carousel", "Showcase five free plan templates professionals can download.", "Promotional", "Download your free template"], [22, "YouTube", "Webinar Trailer", "Teaser video for upcoming free \u201cMaster Your 30-Day Plan\u201d workshop.", "Educational", "Register for the webinar"], [23, "BlueSky", "Spotlight Post", "Feature a user success story with quotes and metrics.", "Community/Engagement", "Congratulate them and connect"], [24, "Instagram", "Image Post", "Limited seats available for an exclusive planning workshop.", "Promotional", "Reserve your spot now"], [25, "Facebook", "Resource Post", "Promote downloadable \u201cContent Calendar Checklist\u201d PDF.", "Educational", "Download the free checklist"], [26, "Instagram", "Reel", "Quick tutorial: adding and scheduling tasks in Board2Plan.", "Educational", "Watch and start your free trial"], [27, "YouTube", "Feature Demo Video", "Walkthrough of premium features and advanced analytics.", "Promotional", "Upgrade your plan today"], [28, "BlueSky", "Feedback Thread", "Ask for feature requests and user feedback.", "Community/Engagement", "Share your ideas"], [29, "Facebook", "Tip Post", "Five tips to measure ROI on your social campaigns.", "Educational", "Read more on our blog"], [30, "Instagram", "Image Post", "Final reminder: free trial ending soon\u2014don\u2019t miss out.", "Promotional", "Start your trial before it ends"]];
+      (days===5 ? rows.slice(0,5) : rows).forEach(r => ws.addRow(r));
+      borderAll(ws, 1, ws.rowCount, 1, 6);
+      applyZebra(ws, 2, ws.rowCount, 1, 6);
+      ws.columns = [{ width:8 }, { width:16 }, { width:22 }, { width:80 }, { width:28 }, { width:32 }];
+      return ws;
+    }
+
+    function addAnalytics(wb, days) {
+      const ws = wb.addWorksheet('Analytics');
+      ws.addRow(['⚠️ Reminder: If you add login info in the Accounts tab, do not share this workbook.']);
+      ws.mergeCells(1,1,1,11);
+      ws.getCell('A1').font = {bold:true, color:{argb:'FFFF0000'}};
+
+      ws.addRow(['Day','Week','Platform','Content','Impressions','Clicks','Likes','Comments','Shares','Saves','Status']);
+      ws.getRow(2).eachCell(c=>{ c.fill=headerFill; c.font=bold; c.border=headerBorder; c.alignment={vertical:'middle'}; });
+
+      for (let i=0;i<(days);i++) ws.addRow([i+1, Math.floor(i/7)+1, '', '', '', '', '', '', '', '', 'Not Started']);
+      for (let r=3; r<=days+2; r++) {
+        ws.getCell(`K${r}`).dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: ['"Not Started,In Progress,Scheduled,Published,Complete"']
+        };
+      }
+      const t = days + 3;
+      ws.getCell(`A${t}`).value = 'Totals';
+      ws.getCell(`A${t}`).font = {bold:true};
+      ws.getCell(`E${t}`).value = {formula:`SUM(E3:E${days+2})`};
+      ws.getCell(`F${t}`).value = {formula:`SUM(F3:F${days+2})`};
+      ws.getCell(`G${t}`).value = {formula:`SUM(G3:G${days+2})`};
+      ws.getCell(`H${t}`).value = {formula:`SUM(H3:H${days+2})`};
+      ws.getCell(`I${t}`).value = {formula:`SUM(I3:I${days+2})`};
+      ws.getCell(`J${t}`).value = {formula:`SUM(J3:J${days+2})`};
+      borderAll(ws,1,t,1,11);
+      applyZebra(ws,3,days+2,1,11);
+      ws.views = [{state:'frozen', ySplit:2}];
+      return ws;
+    }
+
+    function addBestPostTimes(wb) {
+      const ws = wb.addWorksheet('Best Post Times');
+      ws.addRow(['Platform','Best Days','Best Times (EST)']);
+      ws.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=bold; c.border=headerBorder; });
+      [
+        ['Instagram','Mon–Fri','11 AM – 2 PM, 7 PM'],
+        ['Facebook','Mon–Thu','10 AM – 1 PM'],
+        ['LinkedIn','Tue–Thu','8–10 AM, 12 PM'],
+        ['TikTok','Tue–Fri','6–9 AM, 7 PM'],
+        ['YouTube','Thu–Sun','12–3 PM'],
+        ['Twitter/X','Mon–Fri','9 AM – 12 PM'],
+        ['Pinterest','Sat–Sun','8–11 PM']
+      ].forEach(r=>ws.addRow(r));
+      borderAll(ws,1,8,1,3);
+      applyZebra(ws,2,8,1,3);
+      ws.columns = [{width:18},{width:16},{width:30}];
+      ws.addRow([]);
+      ws.addRow(['Note: Times are in EST. Adjust based on your audience analytics and timezone.']);
+      return ws;
+    }
+
+    function addAccounts(wb) {
+      const ws = wb.addWorksheet('Accounts');
+      ws.addRow(['⚠️ This sheet is for convenience only. Do not share this file. Store securely.']);
+      ws.mergeCells(1,1,1,4);
+      ws.addRow(['Platform','Username / Email','Password','Notes']);
+      ws.getRow(2).eachCell(c=>{ c.fill=headerFill; c.font=bold; c.border=headerBorder; });
+      ['Instagram','Facebook','LinkedIn','TikTok','YouTube','Twitter/X','Pinterest'].forEach(p=>ws.addRow([p,'','','']));
+      borderAll(ws,1,9,1,4);
+      ws.columns = [{width:16},{width:28},{width:22},{width:28}];
+      // No sheet protection — fully editable
+      return ws;
+    }
+
+    function addKeywords(wb, brand, business) {
+      const ws = wb.addWorksheet('Keywords & Hashtags');
+      const bt = (business||'General').toLowerCase();
+      ws.addRow(['Primary Keywords', `${bt} marketing`, `${bt} tips`, `${bt} content`, `${brand} ${bt}`]);
+      const tag = bt.replace(/\W+/g,'');
+      ws.addRow(['Hashtag Seeds', `#${tag}`, '#contentmarketing', '#smallbusiness', '#growth', '#marketingplan']);
+      ws.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=bold; c.border=headerBorder; });
+      ws.getRow(2).eachCell(c=>{ c.font=bold; });
+      borderAll(ws,1,2,1,5);
+      ws.columns = [{width:24},{width:24},{width:24},{width:24},{width:28}];
+      return ws;
+    }
+
+    async function buildWorkbook(days) {
       const wb = new ExcelJS.Workbook();
       wb.creator = 'Board2Plan';
       wb.created = new Date();
 
-      const headerFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE2F2FE'} };
-      const headerBorder = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
-      const headerFont = { bold:true };
+      const brand = document.getElementById('brand').value.trim() || 'Board2Plan';
+      const business = document.getElementById('business').value.trim() || 'General';
 
-      // Plan
-      const plan = wb.addWorksheet(days===5 ? '5 Day Plan' : '30 Day Plan', { views:[{state:'frozen', ySplit:1}] });
-      const planColumns = [
-        { header:'Day', key:'day', width:6 },
-        { header:'Week', key:'week', width:6 },
-        { header:'Pillar', key:'pillar', width:14 },
-        { header:'Primary Task', key:'task', width:26 },
-        { header:'Opening Line / Attention Grabber', key:'hook', width:34 },
-        { header:'Platform', key:'platform', width:14 },
-        { header:'Content Needed', key:'asset', width:20 },
-        { header:'CTA', key:'cta', width:16 },
-        { header:'Owner', key:'owner', width:14 },
-        { header:'Status', key:'status', width:14 },
-        { header:'Notes', key:'notes', width:30 },
-      ];
-      plan.columns = planColumns;
-      plan.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=headerFont; c.border=headerBorder; c.alignment={vertical:'middle'}; });
+      addPlanSheet(wb, days);
+      addAnalytics(wb, days);
+      addBestPostTimes(wb);
+      addAccounts(wb);
+      addKeywords(wb, brand, business);
 
-      const pillars = generateBusinessTasks(businessType);
-      let p=0; const idx = Array(pillars.length).fill(0);
-      const headerNote = [brand, goal ? `Goal: ${goal}` : null].filter(Boolean).join(' — ');
-      for (let i=0;i<days;i++) {
-        const pillar = pillars[p];
-        const task = pillar.tasks[idx[p] % pillar.tasks.length];
-        idx[p]++; p = (p+1) % pillars.length;
-        plan.addRow({
-          day:i+1, week:Math.floor(i/7)+1, pillar:pillar.name, task:task,
-          hook:'', platform:'', asset:'', cta:'', owner:'', status:'Not Started', notes: i===0 && headerNote? headerNote: ''
-        });
-      }
-      plan.autoFilter = { from: 'A1', to: `K${days+1}` };
-      zebraFill(plan, 2, days+1, 1, 11);
-      borderAll(plan, 1, days+1, 1, 11);
-      for (let r=2; r<=days+1; r++) {
-        plan.getCell(`J${r}`).dataValidation = {
-          type: 'list',
-          allowBlank: true,
-          formulae: ['"Not Started,In Progress,Scheduled,Published,Complete"']
-        };
-      }
-
-      // Keywords & Hashtags
-      const kw = wb.addWorksheet('Keywords & Hashtags', {views:[{state:'frozen', ySplit:1}]});
-      kw.addRow(['Primary Keywords', `${(businessType||'General').toLowerCase()} marketing`, `${(businessType||'General').toLowerCase()} tips`, `${(businessType||'General').toLowerCase()} content`, `${brand} ${(businessType||'General').toLowerCase()}`]);
-      const baseTag = (businessType||'General').toLowerCase().replace(/\W+/g,'');
-      kw.addRow(['Hashtag Seeds', `#${baseTag}`, '#contentmarketing', '#smallbusiness', '#growth', '#marketingplan']);
-      kw.getRow(1).font = headerFont;
-      kw.getRow(2).font = headerFont;
-      kw.columns = [{width:24},{width:24},{width:24},{width:24},{width:28}];
-      borderAll(kw,1,2,1,5);
-
-      // Analytics
-      const an = wb.addWorksheet('Analytics', {views:[{state:'frozen', ySplit:1}]});
-      const anColumns = [
-        { header:'Day', key:'day', width:6 },
-        { header:'Week', key:'week', width:6 },
-        { header:'Platform', key:'platform', width:14 },
-        { header:'Content', key:'content', width:26 },
-        { header:'Impressions', key:'impr', width:12 },
-        { header:'Clicks', key:'clicks', width:10 },
-        { header:'Likes', key:'likes', width:10 },
-        { header:'Comments', key:'comments', width:12 },
-        { header:'Shares', key:'shares', width:10 },
-        { header:'Saves', key:'saves', width:10 },
-        { header:'Status', key:'status', width:14 },
-      ];
-      an.columns = anColumns;
-      an.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=headerFont; c.border=headerBorder; c.alignment={vertical:'middle'}; });
-      for (let i=0;i<days;i++) {
-        an.addRow({ day:i+1, week:Math.floor(i/7)+1, platform:'', content:'', impr:'', clicks:'', likes:'', comments:'', shares:'', saves:'', status:'Not Started' });
-      }
-      an.autoFilter = { from: 'A1', to: `K${days+1}` };
-      zebraFill(an, 2, days+1, 1, 11);
-      borderAll(an, 1, days+1, 1, 11);
-      for (let r=2; r<=days+1; r++) {
-        an.getCell(`K${r}`).dataValidation = {
-          type: 'list',
-          allowBlank: true,
-          formulae: ['"Not Started,In Progress,Scheduled,Published,Complete"']
-        };
-      }
-      // Totals row (days + 2)
-      const totalsRowIndex = days + 2;
-      an.getCell(`A${totalsRowIndex}`).value = 'Totals';
-      an.getCell(`A${totalsRowIndex}`).font = { bold: true };
-      an.getCell(`E${totalsRowIndex}`).value = { formula: `SUM(E2:E${days+1})` };
-      an.getCell(`F${totalsRowIndex}`).value = { formula: `SUM(F2:F${days+1})` };
-      an.getCell(`G${totalsRowIndex}`).value = { formula: `SUM(G2:G${days+1})` };
-      an.getCell(`H${totalsRowIndex}`).value = { formula: `SUM(H2:H${days+1})` };
-      an.getCell(`I${totalsRowIndex}`).value = { formula: `SUM(I2:I${days+1})` };
-      an.getCell(`J${totalsRowIndex}`).value = { formula: `SUM(J2:J${days+1})` };
-      for (let c = 1; c <= 11; c++) {
-        const cell = an.getCell(totalsRowIndex, c);
-        cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF1F5F9'} };
-        cell.font = { bold:true };
-        cell.border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
-      }
-
-      // Best Post Times
-      const bt = wb.addWorksheet('Best Post Times', {views:[{state:'frozen', ySplit:1}]});
-      bt.addRow(['Platform','Best Days','Best Times (EST)']).font = headerFont;
-      [['Instagram','Mon–Fri','11 AM – 2 PM, 7 PM'],
-       ['Facebook','Mon–Thu','10 AM – 1 PM'],
-       ['LinkedIn','Tue–Thu','8–10 AM, 12 PM'],
-       ['TikTok','Tue–Fri','6–9 AM, 7 PM'],
-       ['YouTube','Thu–Sun','12–3 PM'],
-       ['Twitter/X','Mon–Fri','9 AM – 12 PM'],
-       ['Pinterest','Sat–Sun','8–11 PM']].forEach(row=> bt.addRow(row));
-      bt.columns = [{width:18},{width:16},{width:30}];
-      zebraFill(bt, 2, 8, 1, 3);
-      borderAll(bt, 1, 8, 1, 3);
-      bt.addRow([]);
-      bt.addRow(['Note: Times are in EST. Adjust based on your audience analytics and timezone.']);
-
-      // Accounts
-      const ac = wb.addWorksheet('Accounts', {views:[{state:'frozen', ySplit:2}]});
-      ac.addRow(['⚠️ This sheet is for convenience only. Do not share this file. Store securely.']);
-      ac.addRow(['Platform','Username / Email','Password','Notes']).font = headerFont;
-      ['Instagram','Facebook','LinkedIn','TikTok','YouTube','Twitter/X','Pinterest'].forEach(p => ac.addRow([p,'','','']));
-      ac.columns = [{width:16},{width:28},{width:22},{width:28}];
-      borderAll(ac,1,9,1,4);
-
-      // Save
+      const fname = (document.getElementById('file').value.trim() || 'Board2Plan_Campaign_5Day.xlsx');
       const buffer = await wb.xlsx.writeBuffer();
-      const blob = new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const blob = new Blob([buffer], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fname;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      const a = document.createElement('a'); a.href=url; a.download=fname; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
 
-    document.getElementById('download').addEventListener('click', ()=>{
-      const brand = byId('brand').value.trim();
-      const goal = byId('goal').value.trim();
-      const business = byId('business').value.trim();
-      const fname = byId('file').value.trim() || '5Day_Marketing_Plan.xlsx';
-      buildWorkbook(5, brand, goal, business, fname);
-    });
+    document.getElementById('download').addEventListener('click', () => buildWorkbook(5));
   </script>
 </body>
 </html>
