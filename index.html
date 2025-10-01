@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Board2Plan — 30‑Day Marketing Plan (Business‑Specific)</title>
-  <meta name="description" content="Generate a tailored 30‑day marketing plan for your business: dynamic tasks, content matrix, keywords/hashtags, analytics, and a week‑one checklist." />
+  <title>Board2Plan — 5‑Day Trial Marketing Plan</title>
+  <meta name="description" content="Generate a 5‑day trial marketing plan tailored to your business. Exports to Excel in one click." />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <style>
     :root { --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --ring:#bae6fd; }
@@ -32,8 +32,8 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>Board2Plan — 30‑Day Marketing Plan (Business‑Specific)</h1>
-    <p class="lead">Fill in the fields and download a tailored Excel workbook with a 30‑day plan, content matrix, keywords/hashtags, analytics, and a week‑one checklist.</p>
+    <h1>Board2Plan — 5‑Day Trial Marketing Plan</h1>
+    <p class="lead">Enter the basics and download a tailored <strong>trial</strong> workbook (5 days) to preview the full 30‑day experience.</p>
 
     <div class="card">
       <div class="card-body grid grid-2">
@@ -62,7 +62,7 @@
         </div>
         <div>
           <label for="file">Output file name</label>
-          <input id="file" class="input" value="30Day_Marketing_Plan.xlsx" />
+          <input id="file" class="input" value="5Day_Trial_Marketing_Plan.xlsx" />
         </div>
         <div style="display:flex; align-items:end; justify-content:flex-start;">
           <button id="download" class="btn">⬇️ Generate & Download Excel</button>
@@ -71,7 +71,7 @@
     </div>
 
     <div class="footer">
-      © <span id="year"></span> Board2Plan • Sheets: 30 Day Plan, Content Matrix, Keywords & Hashtags, Analytics, Phase 1.
+      © <span id="year"></span> Board2Plan • Sheets: 5 Day Plan, Content Matrix (5‑day flow), Keywords & Hashtags, Analytics, Trial Checklist.
     </div>
   </div>
 
@@ -146,7 +146,7 @@
       const pillars = generateBusinessTasks(businessType);
       const headerNote = [brand, goal ? `Goal: ${goal}` : null].filter(Boolean).join(' — ');
       let pillarIdx = 0; const taskIdx = Array(pillars.length).fill(0);
-      const rows = Array.from({length:30},(_,i)=>{
+      const rows = Array.from({length:5},(_,i)=>{
         const pillar = pillars[pillarIdx];
         const task = pillar.tasks[taskIdx[pillarIdx] % pillar.tasks.length];
         taskIdx[pillarIdx]++; pillarIdx = (pillarIdx + 1) % pillars.length;
@@ -174,19 +174,20 @@
     function buildContentMatrixSheet(businessType){
       const t = (businessType||'General').toLowerCase();
       const rows = [
-        { Phase: 'Awareness (Wk1)', Purpose: 'Reach & educate', Formats: 'Reels/shorts, carousels, polls', Examples: 'Myths, 3‑step how‑to, poll on challenges' },
-        { Phase: 'Authority (Wk2)', Purpose: 'Demonstrate expertise', Formats: 'Carousels, blog, webinar snippet', Examples: 'Frameworks, definitions, teardown' },
-        { Phase: 'Proof (Wk3)', Purpose: 'Social proof', Formats: 'UGC, testimonials, before/after', Examples: 'Screenshots, quotes, case study' },
-        { Phase: 'Conversion (Wk4)', Purpose: 'Drive action', Formats: 'Offer posts, email sequences', Examples: 'Offer spotlight, FAQ, limited‑time bonus' },
+        { Day: 'Day 1 • Awareness', Purpose: 'Reach & educate', Examples: 'Myth busting, 1 tip, intro post' },
+        { Day: 'Day 2 • Engagement', Purpose: 'Spark interaction', Examples: 'Poll, question, AMA prompt' },
+        { Day: 'Day 3 • Proof', Purpose: 'Build trust', Examples: 'Testimonial, before/after, mini case' },
+        { Day: 'Day 4 • Nurture', Purpose: 'Teach & help', Examples: 'How‑to, checklist, quick win' },
+        { Day: 'Day 5 • Conversion', Purpose: 'Drive action', Examples: 'Offer spotlight, FAQ, CTA' },
       ];
-      if(t.includes('restaurant')) rows[0].Examples = 'Menu myths, sourcing story, poll: spicy or mild?';
-      if(t.includes('coach')) rows[1].Examples = 'Framework carousel, client breakdown, AMA clip';
-      if(t.includes('ecommerce') || t.includes('shop')) rows[2].Examples = 'UGC try‑on, testimonial reel, before/after photo';
-      if(t.includes('med spa')) rows[0].Examples = 'Treatment myths, skincare routines, poll: goals (wrinkles, texture, glow)';
-      if(t.includes('fitness')) rows[0].Examples = 'Form tips, mini workouts, poll: goals (strength, fat loss, mobility)';
-      if(t.includes('nonprofit')) rows[0].Examples = 'Mission snapshots, program myths, poll: causes audience supports';
+      if(t.includes('restaurant')) rows[0].Examples = 'House specialty myth, chef tip, intro to the concept';
+      if(t.includes('coach')) rows[3].Examples = 'Mini framework, worksheet, 3‑step method';
+      if(t.includes('ecommerce') || t.includes('shop')) rows[2].Examples = 'UGC try‑on, review, comparison';
+      if(t.includes('med spa')) rows[0].Examples = 'Treatment myths, skincare tip, provider intro';
+      if(t.includes('fitness')) rows[3].Examples = 'Form checklist, short workout, recovery tip';
+      if(t.includes('nonprofit')) rows[1].Examples = 'Poll on causes, volunteer Q&A prompt';
       const ws = XLSX.utils.json_to_sheet(rows);
-      ws['!cols'] = [{ wch: 20 }, { wch: 22 }, { wch: 30 }, { wch: 60 }];
+      ws['!cols'] = [{ wch: 20 }, { wch: 22 }, { wch: 60 }];
       return ws;
     }
 
@@ -203,25 +204,23 @@
     }
 
     function buildAnalyticsSheet(){
-      const rows = Array.from({length:30},(_,i)=> ({
+      const rows = Array.from({length:5},(_,i)=> ({
         Day: i+1, Channel:'', Content:'', Impressions:'', Clicks:'', Likes:'', Comments:'', Shares:'', Saves:'', CTR:'', 'Engagement Rate':''
       }));
       const ws = XLSX.utils.json_to_sheet(rows);
-      for(let r=2;r<=31;r++){ ws[`J${r}`]={ f:`IFERROR(E${r}/D${r},0)` }; ws[`K${r}`]={ f:`IFERROR((F${r}+G${r}+H${r}+I${r})/D${r},0)` }; }
+      for(let r=2;r<=6;r++){ ws[`J${r}`]={ f:`IFERROR(E${r}/D${r},0)` }; ws[`K${r}`]={ f:`IFERROR((F${r}+G${r}+H${r}+I${r})/D${r},0)` }; }
       ws['!cols'] = [{ wch: 6 }, { wch: 12 }, { wch: 36 }, { wch: 12 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 16 }];
       return ws;
     }
 
-    function buildPhase1Sheet(){
+    function buildTrialChecklist(){
       const aoa = [
         ['Day','Task','Area','Owner','Status','Notes'],
-        ['Day 1','Define campaign theme and single KPI','Strategy','','Not started',''],
-        ['Day 2','Audit channels and pick 2 primary platforms','Strategy','','Not started',''],
-        ['Day 3','Draft 10 content hooks & 5 CTAs','Creative','','Not started',''],
-        ['Day 4','Create 3 core assets (video, carousel, image)','Production','','Not started',''],
-        ['Day 5','Schedule next 7 days of posts','Operations','','Not started',''],
-        ['Day 6','Engage: 20 meaningful interactions','Community','','Not started',''],
-        ['Day 7','Report quick wins, adjust hooks/CTAs','Analytics','','Not started',''],
+        ['Day 1','Set single outcome + CTA for the week','Strategy','','Not started',''],
+        ['Day 2','Draft 5 hooks + 2 CTAs','Creative','','Not started',''],
+        ['Day 3','Produce 2 core assets (video/carousel)','Production','','Not started',''],
+        ['Day 4','Schedule posts + set tracking','Operations','','Not started',''],
+        ['Day 5','Collect results + next‑step offer','Analytics','','Not started',''],
       ];
       const ws = XLSX.utils.aoa_to_sheet(aoa);
       ws['!cols'] = [{ wch: 8 }, { wch: 48 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 36 }];
@@ -232,14 +231,14 @@
       const brand = byId('brand').value.trim();
       const goal = byId('goal').value.trim();
       const business = byId('business').value.trim();
-      const fname = byId('file').value.trim() || '30Day_Marketing_Plan.xlsx';
+      const fname = byId('file').value.trim() || '5Day_Trial_Marketing_Plan.xlsx';
 
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, buildPlanSheet(brand, goal, business), '30 Day Marketing Plan');
+      XLSX.utils.book_append_sheet(wb, buildPlanSheet(brand, goal, business), '5 Day Marketing Plan');
       XLSX.utils.book_append_sheet(wb, buildContentMatrixSheet(business), 'Content Matrix');
       XLSX.utils.book_append_sheet(wb, buildKeywordsSheet(business, brand), 'Keywords & Hashtags');
       XLSX.utils.book_append_sheet(wb, buildAnalyticsSheet(), 'Analytics');
-      XLSX.utils.book_append_sheet(wb, buildPhase1Sheet(), 'Phase 1');
+      XLSX.utils.book_append_sheet(wb, buildTrialChecklist(), 'Trial Checklist');
 
       XLSX.writeFile(wb, fname);
     });
