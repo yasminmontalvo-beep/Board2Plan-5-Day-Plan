@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Board2Plan – 5‑Day Marketing Plan (Final)</title>
+  <title>5-Day Marketing Plan (Standalone)</title>
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#22c55e">
@@ -24,12 +24,68 @@
     .actions { display:grid; gap:10px; margin-top:8px; }
     .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:16px; box-shadow:0 2px 8px rgba(2,6,23,.04); }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js">
+
+const PLAYBOOK = {
+  "Restaurant":{personas:["Local foodie","Date‑night planner"],pillars:["Menu","Promos","UGC","BTS"],hooks:["Tonight’s special:","What our chef does differently:","Date night solved:"],ctas:["Reserve","Order online","Call now"],hashtags:["#LocalEats","#ChefSpecial","#Foodie","#DateNight","#SupportLocal"],caption:"Hook ➜ Dish/offer ➜ Social proof ➜ CTA."},
+  "Home Services / Trades":{personas:["Homeowner in a hurry","Planner researching pros"],pillars:["Education","Before/After","Testimonials","Promotions"],hooks:["Stop this mistake:","Quick fix for:","What to do first if:"],ctas:["Request a free quote","Save our number","Book inspection"],hashtags:["#HomeFix","#BeforeAfter","#LocalPro","#SafetyFirst","#Maintenance"],caption:"Problem ➜ Quick tip ➜ Proof ➜ CTA (Free quote)."},
+  "Real Estate":{personas:["First‑time buyer","Move‑up seller"],pillars:["Listings","Education","Client wins","Neighborhood"],hooks:["This block just got a gem:","3 reasons this layout wins:","Price drop alert:"],ctas:["Book a showing","Get valuation","DM 'LIST'"],hashtags:["#NewListing","#OpenHouse","#MarketUpdate","#DreamHome","#JustSold"],caption:"Hook (address/price) ➜ 3 highlights ➜ Area benefit ➜ CTA."},
+  "Beauty / Salon":{personas:["Transformation seeker","Maintenance client"],pillars:["Transformations","Product tips","UGC","BTS & hygiene"],hooks:["From brassy to glossy:","Formula breakdown:","How to keep this shine:"],ctas:["Book now","See open slots","DM 'GLOW'"],hashtags:["#HairTransformation","#GlowUp","#SalonTips","#SkinCare","#ProStylist"],caption:"Before ➜ Process ➜ After ➜ Formula hint ➜ CTA."},
+  "E-commerce Retail":{personas:["Gift buyer","Everyday user"],pillars:["Bestsellers","UGC","How‑to","Drops & bundles"],hooks:["Wait till you see the 3rd item:","Unbox with me:","Solve this daily hassle:"],ctas:["Shop the drop","Add to cart","Claim bundle"],hashtags:["#Bestsellers","#Unboxing","#ShopNow","#UGC","#BundleAndSave"],caption:"Hook ➜ Benefit bullets ➜ Social proof ➜ CTA."},
+  "Professional Services":{personas:["Decision‑maker","Researcher"],pillars:["Frameworks","Case studies","Testimonials","Promos"],hooks:["We cut cost by 27% using:","3‑step play to fix:","Stop doing this in Q4:"],ctas:["Book consult","Download checklist","DM 'AUDIT'"],hashtags:["#CaseStudy","#Framework","#B2B","#Consulting","#ROI"],caption:"Problem ➜ Approach ➜ Result metric ➜ CTA."},
+  "Nonprofit / Community":{personas:["Local supporter","Volunteer"],pillars:["Impact stories","Events","Education","Gratitude"],hooks:["Because of you, Maya…","This $10 becomes:","Help us reach 100 kits:"],ctas:["Donate today","Sign up to help","Share this"],hashtags:["#GiveBack","#Community","#Volunteer","#Impact","#Nonprofit"],caption:"Person/impact ➜ Where funds go ➜ Next step ➜ CTA."},
+  "Travel & Hospitality":{personas:["Weekend tripper","Family planner"],pillars:["Destination tips","Packages","Reviews","BTS tours"],hooks:["3 local spots only locals know:","Pack smarter for:","Best month to go:"],ctas:["Request a quote","See availability","DM dates"],hashtags:["#TravelTips","#Wanderlust","#Hotel","#Vacation","#TravelDeal"],caption:"Hook (season) ➜ 3 tips ➜ Package value ➜ CTA."},
+  "Healthcare / Wellness":{personas:["Preventive care","Condition‑specific"],pillars:["Education","Myth vs fact","Testimonials","Seasonal"],hooks:["Myth vs fact:","3 signs you should check:","Save this for flu season:"],ctas:["Book a consultation","Call clinic","Send a question"],hashtags:["#Wellness","#Prevention","#HealthTips","#SelfCare","#Clinic"],caption:"Symptom/concern ➜ Plain‑English tip ➜ When to see a pro ➜ CTA."},
+  "Education / Coaching":{personas:["Self‑improver","Career switcher"],pillars:["Mini‑lessons","Wins","Behind the curriculum","CTA to cohort"],hooks:["If you struggle with:","A 5‑minute way to:","Try this framework:"],ctas:["Book discovery call","Join waitlist","Download worksheet"],hashtags:["#LearnToday","#CoachTips","#MicroLesson","#Cohort","#Grow"],caption:"Hook (problem) ➜ 3‑step mini lesson ➜ Download/DM ➜ CTA."},
+  "Fitness":{personas:["Beginner","Challenge seeker"],pillars:["WODs","Nutrition","Transformations","Community"],hooks:["Steal this workout:","Fix your form in 10s:","2 foods to swap:"],ctas:["Book a free trial","Join the challenge","DM 'START'"],hashtags:["#WOD","#FitnessTips","#Gym","#Nutrition","#FitJourney"],caption:"Hook ➜ Demo ➜ Coaching cue ➜ CTA."},
+  "Automotive":{personas:["New buyer","Service customer"],pillars:["Inventory","Service tips","Testimonials","Promos"],hooks:["Why this trim is worth it:","Don’t ignore this light:","Detailing secrets:"],ctas:["Book a test drive","Schedule service","Check eligibility"],hashtags:["#CarCare","#NewArrival","#AutoLife","#ServiceTips","#Detailing"],caption:"Hook (feature) ➜ Benefit ➜ Offer/financing ➜ CTA."},
+  "Events / Venues":{personas:["Local night out","Community group"],pillars:["Lineups","Vendors/Artists","BTS","Recaps & promos"],hooks:["Weekend plans?","Sneak peek of the stage:","Last call for:"],ctas:["Buy tickets","View schedule","RSVP"],hashtags:["#EventLineup","#SaveTheDate","#LocalEvents","#LiveMusic","#VendorSpotlight"],caption:"Hook (date/artist) ➜ 3 reasons to go ➜ Offer ➜ CTA."},
+  "Tech / SaaS":{personas:["Ops owner","IC user"],pillars:["Features","Use cases","Wins","Roadmap"],hooks:["Ship 2x faster with:","We killed 3 spreadsheets using:","Stop copy‑pasting:"],ctas:["Start free trial","See case study","Join webinar"],hashtags:["#SaaS","#FeatureSpotlight","#UseCases","#Automation","#ProductUpdate"],caption:"Pain ➜ Feature ➜ Outcome metric ➜ CTA."},
+  "Legal Services":{personas:["Concerned individual","Small business owner"],pillars:["Tips","Testimonials","BTS prep","Webinars"],hooks:["Before you sign:","Top 3 mistakes in:","Do this within 24h:"],ctas:["Book a consult","Ask a question","Download checklist"],hashtags:["#LegalTips","#KnowYourRights","#LawFirm","#FreeConsult","#PlainEnglish"],caption:"Hook (common issue) ➜ Tip ➜ Risk avoided ➜ CTA."},
+  "Financial Services":{personas:["Starter saver","Wealth builder"],pillars:["Money tips","Client wins","Planning BTS","Promos"],hooks:["Stop doing this with your savings:","2 rules for beginners:","What to do in a dip:"],ctas:["Book intro call","Download checklist","DM 'PLAN'"],hashtags:["#MoneyTips","#Finance101","#Wealth","#Investing","#FinancialPlan"],caption:"Myth ➜ Fact ➜ Simple step ➜ CTA."}
+};
+
+
+function addPlaybookSheet(wb, business, goal, tone) {
+  const ws = wb.addWorksheet('Playbook');
+  const headerFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE2F2FE'} };
+  const headerBorder = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+  const bold = { bold:true };
+
+  const p = (PLAYBOOK && PLAYBOOK[business]) ? PLAYBOOK[business] : PLAYBOOK["Professional Services"];
+
+  // Title rows
+  const r1 = ws.addRow([`Playbook for: ${business}`]); r1.font = { bold:true }; r1.getCell(1).fill = headerFill;
+  const r2 = ws.addRow([`Goal: ${goal} | Tone: ${tone || ''}`]); r2.getCell(1).fill = headerFill;
+  ws.addRow(['']);
+
+  function section(label, values) {
+    const hr = ws.addRow([label]); hr.font = { bold:true };
+    hr.getCell(1).fill = headerFill; hr.getCell(1).border = headerBorder;
+    if (Array.isArray(values)) {
+      values.forEach(v => ws.addRow([v]));
+    } else if (typeof values === 'string') {
+      ws.addRow([values]);
+    }
+    ws.addRow(['']);
+  }
+
+  section('Audience Personas', p.personas);
+  section('Content Pillars', p.pillars);
+  section('Hook Starters', p.hooks);
+  section('CTA Examples', (p.ctas||[]).join(' • '));
+  section('Default Hashtags', (p.hashtags||[]).join(' '));
+  section('Caption Framework', p.caption || '');
+
+  ws.columns = [{ width: 90 }];
+  return ws;
+}
+
+</script>
 </head>
 <body>
   <div class="wrap">
-    <h1>Board2Plan – 5‑Day Marketing Plan</h1>
-    <p>Final merged build: Simple UI + Goal dropdown, and enhanced Excel (Analytics warning & totals, Best Post Times, Accounts unlocked, Keywords & Hashtags).</p>
+    <h1> 5-Day Marketing Plan </h1>
     <div class="card">
       <div class="grid">
         <div>
@@ -51,23 +107,28 @@
         </div>
         <div>
           <label for="business">Business Type</label>
-          <select id="business">
-            <option>General</option>
-            <option>Restaurant / Food</option>
-            <option>Coaching / Consulting</option>
-            <option>Ecommerce / Shop</option>
-            <option>Real Estate</option>
-            <option>SaaS</option>
-            <option>Med Spa</option>
-            <option>Fitness</option>
-            <option>Nonprofit</option>
-            <option>Marketing</option>
-            <option>Trade (Lawncare / Carpentry / Roofing / Painting / Construction)</option>
-          </select>
+          \1
+  <option>Restaurant</option>
+  <option>Home Services / Trades</option>
+  <option>Real Estate</option>
+  <option>Beauty / Salon</option>
+  <option>E-commerce Retail</option>
+  <option>Professional Services</option>
+  <option>Nonprofit / Community</option>
+  <option>Travel & Hospitality</option>
+  <option>Healthcare / Wellness</option>
+  <option>Education / Coaching</option>
+  <option>Fitness</option>
+  <option>Automotive</option>
+  <option>Events / Venues</option>
+  <option>Tech / SaaS</option>
+  <option>Legal Services</option>
+  <option>Financial Services</option>
+\3
         </div>
         <div>
           <label for="file">Output file name</label>
-          <input id="file" class="input" value="Board2Plan_Campaign_5Day.xlsx" />
+          <input \1\"Campaign_5Day.xlsx\" />
         </div>
       </div>
       <div class="actions">
@@ -102,10 +163,116 @@
       }
     }
 
-    function addPlanSheet(wb) {
-      const ws = wb.addWorksheet('5-Day Plan');
-      ws.addRow(['Day','Platform','Content Type','Post Concept','Content Pillar','Call-to-Action']);
-      ws.getRow(1).eachCell(cell=>{ cell.fill=headerFill; cell.font=bold; cell.border=headerBorder; cell.alignment={vertical:'middle'}; });
+    
+function addPlanSheet(wb, business, goal) {
+  const ws = wb.addWorksheet('5-Day Plan');
+  const headerFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE2F2FE'} };
+  const headerBorder = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+  const zebraFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF8FAFC'} };
+  const bold = { bold:true };
+
+  const ORDER = ["Instagram","Facebook","LinkedIn","TikTok","YouTube Shorts","Instagram Stories","Twitter/X","Pinterest"];
+  const IDEAS = {
+    "Restaurant":[["Instagram","Image / Reel","Chef special spotlight","Educational","Reserve a table"],
+                   ["Facebook","Image / Carousel","Happy hour carousel","Promotional","Book now"],
+                   ["TikTok","Short-form Video","Prep time-lapse (BTS)","Behind the Scenes","See today’s menu"],
+                   ["Instagram","Image / Reel","Review quote graphic","Community","Leave a review"],
+                   ["Instagram Stories","Stories (3-5 slides)","Limited menu countdown","Trend-Driven","Order online"]],
+    "Home Services / Trades":[["Facebook","Image / Carousel","Seasonal maintenance tip","Education","Request a free quote"],
+                   ["Instagram","Image / Reel","Before/After project reel","Before/After","Book inspection"],
+                   ["LinkedIn","Carousel / Text Post","Checklist: what to do first","Education","Save our number"],
+                   ["TikTok","Short-form Video","In-field quick fix","Education","Book inspection"],
+                   ["Facebook","Image / Carousel","Customer testimonial","Testimonials","Request a free quote"]],
+    "Real Estate":[["Instagram","Carousel","New listing highlights","Promotional","Book a showing"],
+                   ["LinkedIn","Carousel / Text Post","Market update snapshot","Educational","Get your home value"],
+                   ["Facebook","Image / Carousel","Neighborhood guide","Educational","Download the guide"],
+                   ["Instagram","Image / Reel","Client success story","Community","Start your search"],
+                   ["Instagram Stories","Stories (3-5 slides)","Open house countdown","Promotional","RSVP for the tour"]],
+    "Beauty / Salon":[["Instagram","Image / Reel","Transformation before/after","Transformations","Book now"],
+                      ["TikTok","Short-form Video","Product tip mini-tutorial","Product tips","See open slots"],
+                      ["Instagram","Image / Reel","Hygiene/BTS reel","BTS & hygiene","DM 'GLOW'"],
+                      ["Instagram Stories","Stories (3-5 slides)","At-home care tips","Product tips","Book now"],
+                      ["Facebook","Image / Carousel","Review wall","Community","See open slots"]],
+    "E-commerce Retail":[["Instagram","Image / Reel","Bestseller unboxing","UGC","Shop the drop"],
+                         ["YouTube Shorts","Short-form Video","How-to usage clip","How-to","Add to cart"],
+                         ["Facebook","Image / Carousel","Bundle/discount promo","Drops & bundles","Claim bundle"],
+                         ["TikTok","Short-form Video","Problem → solution demo","How-to","Add to cart"],
+                         ["Instagram Stories","Stories (3-5 slides)","Customer quotes","UGC","Shop the drop"]],
+    "Professional Services":[["LinkedIn","Carousel / Text Post","3-step framework","Frameworks","Book a consult"],
+                             ["LinkedIn","Carousel / Text Post","Case study metric","Case studies","See case study"],
+                             ["Instagram","Image / Reel","Free audit promo","Promotions","DM 'AUDIT'"],
+                             ["Twitter/X","Text + Image","One actionable tip","Education","Download checklist"],
+                             ["YouTube Shorts","Short-form Video","Founder POV tip (30s)","Education","Book a consult"]],
+    "Nonprofit / Community":[["Facebook","Image / Carousel","Impact story highlight","Impact stories","Donate today"],
+                             ["Instagram","Image / Reel","Volunteer call-to-action","Events","Sign up to help"],
+                             ["Instagram Stories","Stories (3-5 slides)","Thank-you wall","Gratitude","Share this"],
+                             ["LinkedIn","Carousel / Text Post","Transparent funds breakdown","Education","Donate today"],
+                             ["Facebook","Image / Carousel","Event promo","Events","RSVP"]],
+    "Travel & Hospitality":[["Instagram","Image / Reel","Destination tips carousel","Destination tips","Request a quote"],
+                            ["TikTok","Short-form Video","Room/property walk-through","BTS tours","See availability"],
+                            ["Facebook","Image / Carousel","Package/promo highlight","Packages","DM dates"],
+                            ["YouTube Shorts","Short-form Video","Local hidden gems","Destination tips","Request a quote"],
+                            ["Instagram Stories","Stories (3-5 slides)","Countdown to offer end","Packages","See availability"]],
+    "Healthcare / Wellness":[["Instagram","Image / Reel","Myth vs fact card","Education","Book a consultation"],
+                             ["Facebook","Image / Carousel","Seasonal health reminder","Seasonal","Call clinic"],
+                             ["LinkedIn","Carousel / Text Post","Clinic explainer (plain English)","Education","Send a question"],
+                             ["Instagram Stories","Stories (3-5 slides)","Self-care checklist","Seasonal","Book a consultation"],
+                             ["Facebook","Image / Carousel","Patient testimonial","Testimonials","Call clinic"]],
+    "Education / Coaching":[["Instagram","Carousel","Mini-lesson (3 bullets)","Mini-lessons","Download worksheet"],
+                            ["LinkedIn","Carousel / Text Post","Student win spotlight","Wins","Join waitlist"],
+                            ["YouTube Shorts","Short-form Video","Framework in 30 seconds","Mini-lessons","Book discovery call"],
+                            ["Instagram Stories","Stories (3-5 slides)","Behind the curriculum","Behind the curriculum","Join waitlist"],
+                            ["Facebook","Image / Carousel","Cohort promo","CTA to cohort","Book discovery call"]],
+    "Fitness":[["Instagram","Image / Reel","Workout demo (WOD)","WODs","Book a free trial"],
+               ["TikTok","Short-form Video","Form cue: fix this","WODs","Join the challenge"],
+               ["Instagram","Image / Reel","Nutrition swap tip","Nutrition","DM 'START'"],
+               ["YouTube Shorts","Short-form Video","Member transformation","Transformations","Book a free trial"],
+               ["Instagram Stories","Stories (3-5 slides)","Habit tracker prompt","Community","Join the challenge"]],
+    "Automotive":[["Facebook","Image / Carousel","New arrival feature","Inventory","Book a test drive"],
+                  ["Instagram","Image / Reel","Service tip quick clip","Service tips","Schedule service"],
+                  ["YouTube Shorts","Short-form Video","Detailing secrets","Promos","Check eligibility"],
+                  ["Instagram Stories","Stories (3-5 slides)","Financing Q&A","Promos","Schedule service"],
+                  ["Facebook","Image / Carousel","Customer testimonial","Testimonials","Book a test drive"]],
+    "Events / Venues":[["Instagram","Image / Reel","Lineup reveal","Lineups","Buy tickets"],
+                       ["TikTok","Short-form Video","Vendor/artist spotlight","Vendors/Artists","View schedule"],
+                       ["Instagram Stories","Stories (3-5 slides)","Setup BTS time-lapse","BTS","RSVP"],
+                       ["Facebook","Image / Carousel","Early-bird promo","Recaps & promos","Buy tickets"],
+                       ["YouTube Shorts","Short-form Video","Stage sneak peek","BTS","Buy tickets"]],
+    "Tech / SaaS":[["LinkedIn","Carousel / Text Post","Feature spotlight with ROI","Features","Start free trial"],
+                   ["Twitter/X","Text + Image","Use-case mini case","Use cases","See case study"],
+                   ["LinkedIn","Carousel / Text Post","Customer win","Wins","Start free trial"],
+                   ["YouTube Shorts","Short-form Video","Roadmap teaser","Roadmap","Join webinar"],
+                   ["Instagram","Image / Reel","Quick tip from support","Use cases","Start free trial"]],
+    "Legal Services":[["LinkedIn","Carousel / Text Post","Before you sign… tip","Tips","Book a consult"],
+                      ["Instagram","Image / Reel","Common mistakes carousel","Education","Ask a question"],
+                      ["Facebook","Image / Carousel","Webinar/Q&A promo","Webinars","Download checklist"],
+                      ["Instagram Stories","Stories (3-5 slides)","Client FAQ","Tips","Book a consult"],
+                      ["LinkedIn","Carousel / Text Post","Case result explainer","Testimonials","Ask a question"]],
+    "Financial Services":[["LinkedIn","Carousel / Text Post","Simple money rule (2 bullets)","Money tips","Book intro call"],
+                          ["Instagram","Image / Reel","Client win metric","Client wins","DM 'PLAN'"],
+                          ["Twitter/X","Text + Image","Market moment explainers","Money tips","Download checklist"],
+                          ["YouTube Shorts","Short-form Video","Planning BTS snapshot","Planning BTS","Book intro call"],
+                          ["Facebook","Image / Carousel","Promo: free intro call","Promos","Book intro call"]]
+  };
+
+  ws.addRow(['Day','Platform','Content Type','Post Concept','Content Pillar','Call-to-Action']);
+  ws.getRow(1).eachCell(cell=>{ cell.fill=headerFill; cell.font=bold; cell.border=headerBorder; cell.alignment={vertical:'middle'}; });
+
+  const rows = (IDEAS[business] || IDEAS['Professional Services']).slice(0,5).map((r, i) => [i+1, ...r]);
+  rows.forEach(r => ws.addRow(r));
+
+  for (let r=1; r<=ws.rowCount; r++) {
+    for (let c=1; c<=6; c++) {
+      const cell = ws.getCell(r,c);
+      cell.border = headerBorder;
+      if (r>1 && r%2===0) cell.fill = zebraFill;
+      cell.alignment = { vertical:'top', wrapText:true };
+    }
+  }
+  ws.columns = [{ width:8 }, { width:16 }, { width:22 }, { width:64 }, { width:28 }, { width:28 }];
+  return ws;
+}
+; });
       const rows = [[1, "Facebook", "Image Post", "Infographic highlighting how Board2Plan saves professionals 5+ hours weekly on social planning.", "Educational", "Learn more on our website"], [2, "Instagram", "Carousel", "Showcase subscription tiers, key benefits for each plan with clear visuals.", "Promotional", "Swipe up to start your free trial"], [3, "BlueSky", "Text Post", "\u201cWhat\u2019s your biggest challenge when planning social content? Let\u2019s discuss?\u201d", "Community/Engagement", "Share your planning challenges below"], [4, "YouTube", "Tutorial Video", "Step-by-step guide to setting up your first 30-day content plan in Board2Plan.", "Educational", "Subscribe and try it yourself"], [5, "YouTube", "YouTube Shorts", "Trending audio \u201cPlan with me\u201d quick snippet showing a calendar setup.", "Trending/Entertainment", "Check out Board2Plan via link in description"]];
       rows.forEach(r => ws.addRow(r));
       borderAll(ws, 1, ws.rowCount, 1, 6);
@@ -146,10 +313,51 @@
       return ws;
     }
 
-    function addBestPostTimes(wb) {
-      const ws = wb.addWorksheet('Best Post Times');
-      ws.addRow(['Platform','Best Days','Best Times (EST)']);
-      ws.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=bold; c.border=headerBorder; });
+    
+function addBestPostTimes(wb, business) {
+  const ws = wb.addWorksheet('Best Post Times');
+  const headerFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE2F2FE'} };
+  const headerBorder = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+  const zebraFill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFF8FAFC'} };
+  const bold = { bold:true };
+
+  const DEFAULT = {"Instagram":"11:00 AM","Instagram Stories":"10:00 AM","Facebook":"12:00 PM","LinkedIn":"9:00 AM","TikTok":"7:30 PM","YouTube":"12:00 PM","YouTube Shorts":"6:00 PM","Twitter/X":"1:00 PM","Pinterest":"8:00 PM"};
+  const TIMES = {
+    "Restaurant": {"Instagram":"1:00 PM","Instagram Stories":"11:30 AM","Facebook":"12:30 PM","TikTok":"8:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:00 PM"},
+    "Home Services / Trades": {"Facebook":"6:30 PM","LinkedIn":"8:30 AM","Instagram":"12:00 PM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM"},
+    "Real Estate": {"Instagram":"12:30 PM","Facebook":"1:00 PM","LinkedIn":"8:30 AM","TikTok":"7:30 PM","YouTube Shorts":"6:30 PM"},
+    "Beauty / Salon": {"Instagram":"1:30 PM","Instagram Stories":"10:30 AM","TikTok":"8:30 PM","YouTube Shorts":"7:30 PM","Pinterest":"9:30 PM"},
+    "E-commerce Retail": {"Instagram":"12:00 PM","Facebook":"1:00 PM","TikTok":"9:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:30 PM"},
+    "Professional Services": {"LinkedIn":"8:00 AM","Twitter/X":"12:00 PM","Instagram":"1:00 PM","YouTube Shorts":"6:00 PM"},
+    "Nonprofit / Community": {"Facebook":"12:30 PM","Instagram":"1:00 PM","Instagram Stories":"11:00 AM","TikTok":"8:00 PM"},
+    "Travel & Hospitality": {"Instagram":"11:30 AM","Facebook":"12:00 PM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM","Pinterest":"8:30 PM"},
+    "Healthcare / Wellness": {"Facebook":"12:00 PM","Instagram":"11:30 AM","LinkedIn":"9:00 AM","TikTok":"7:30 PM"},
+    "Education / Coaching": {"LinkedIn":"8:30 AM","Instagram":"12:30 PM","YouTube Shorts":"6:30 PM","TikTok":"8:30 PM"},
+    "Fitness": {"Instagram":"11:30 AM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM","Instagram Stories":"9:30 AM"},
+    "Automotive": {"Facebook":"12:30 PM","Instagram":"1:00 PM","YouTube Shorts":"6:30 PM","TikTok":"8:00 PM"},
+    "Events / Venues": {"Instagram":"12:30 PM","Facebook":"1:00 PM","TikTok":"8:30 PM","Instagram Stories":"10:30 AM"},
+    "Tech / SaaS": {"LinkedIn":"8:30 AM","Twitter/X":"12:30 PM","YouTube Shorts":"6:00 PM"},
+    "Legal Services": {"LinkedIn":"8:30 AM","Facebook":"12:30 PM","Instagram":"1:00 PM"},
+    "Financial Services": {"LinkedIn":"8:30 AM","Twitter/X":"12:30 PM","Instagram":"12:30 PM","YouTube Shorts":"6:30 PM"}
+  };
+
+  ws.addRow(['Platform','Best Times (Local)']);
+  ws.getRow(1).eachCell(c=>{ c.fill=headerFill; c.font=bold; c.border=headerBorder; });
+
+  const map = Object.assign({}, DEFAULT, TIMES[business] || {});
+  Object.keys(map).forEach(p => ws.addRow([p, map[p]]));
+
+  for (let r=1; r<=ws.rowCount; r++) {
+    for (let c=1; c<=2; c++) {
+      const cell = ws.getCell(r,c);
+      cell.border = headerBorder;
+      if (r>1 && r%2===0) cell.fill = zebraFill;
+    }
+  }
+  ws.columns = [{width:18},{width:28}];
+  return ws;
+}
+);
       [
         ['Instagram','Mon–Fri','11 AM – 2 PM, 7 PM'],
         ['Facebook','Mon–Thu','10 AM – 1 PM'],
@@ -202,9 +410,9 @@
       const business = document.getElementById('business').value.trim() || 'General';
       const goal = document.getElementById('goal').value.trim() || 'Lead Generation';
 
-      addPlanSheet(wb);
+      addPlanSheet(wb, business, goal);
       addAnalytics(wb);
-      addBestPostTimes(wb);
+      addBestPostTimes(wb, business);
       addAccounts(wb);
       addKeywords(wb, brand, business);
 
@@ -219,3 +427,5 @@
   </script>
 </body>
 </html>
+
+<script>function slug(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}</script>
