@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SafeMode 5‑Day Planner – Full 16 Industries (GitHub‑ready)</title>
+  <title>5‑Day Marketing Plan (SafeMode – 16 Industries + Playbook)</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -12,7 +12,7 @@
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink)}
     header{background:#fff;border-bottom:1px solid var(--line)}
-    .wrap{max-width:1120px;margin:0 auto;padding:16px}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
     h1{font-size:22px;margin:0}
     .sub{font-size:12px;color:#666}
     .panel{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--soft);margin-top:12px}
@@ -32,17 +32,17 @@
 <body>
   <header>
     <div class="wrap">
-      <h1>SafeMode 5‑Day Planner (16 Industries)</h1>
-      <div class="sub">Standalone • Shopify + Email wired • No unwanted branding • Exports CSV + multi‑sheet XLS (Plan, Keywords & Hashtags, Analytics, Best Post Times, Accounts, Playbook)</div>
+      <h1>5‑Day Marketing Plan</h1>
+      <div class="sub">Standalone (no libraries) • CSV + multi‑sheet XLS export • 16 industries • Playbook included</div>
     </div>
   </header>
 
   <main class="wrap">
     <section class="panel">
       <div class="grid cols-4">
-        <label>Brand (optional)<br><input id="SM5_brand" placeholder="e.g., Acme Realty"></label>
+        <label>Brand (optional)<br><input id="brand" placeholder="e.g., Acme Realty"></label>
         <label>Business Type<br>
-          <select id="SM5_biz">
+          <select id="biz">
             <option>Restaurant</option>
             <option>Home Services / Trades</option>
             <option>Real Estate</option>
@@ -62,15 +62,20 @@
           </select>
         </label>
         <label>Goal<br>
-          <select id="SM5_goal">
+          <select id="goal">
             <option>Lead Generation</option>
             <option>Engagement</option>
-            <option>Awareness</option>
-            <option>Sales</option>
+            <option>Brand Awareness</option>
+            <option>Sales / Conversions</option>
+            <option>Website Traffic</option>
+            <option>Event Promotion</option>
+            <option>Product Launch</option>
+            <option>Community Building</option>
+            <option>Growth</option>
           </select>
         </label>
         <label>Tone<br>
-          <select id="SM5_tone">
+          <select id="tone">
             <option>Educational</option>
             <option>Promotional</option>
             <option>Community</option>
@@ -80,16 +85,16 @@
         </label>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-        <button id="SM5_go">Generate</button>
-        <button id="SM5_csv" class="ghost">Export CSV</button>
-        <button id="SM5_xls" class="ghost">Download Workbook (.xls)</button>
+        <button id="go">Generate</button>
+        <button id="csv" class="ghost">Export CSV</button>
+        <button id="xls" class="ghost">Download Workbook (.xls)</button>
         <a class="btn" style="background:#22c55e;border:none" href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener">🛒 Buy on Shopify</a>
       </div>
-      <div id="SM5_diag" class="diag" role="status" aria-live="polite"></div>
+      <div id="diag" class="diag" role="status" aria-live="polite"></div>
     </section>
 
     <section class="panel">
-      <table id="SM5_table"></table>
+      <table id="table"></table>
     </section>
 
     <footer>
@@ -98,31 +103,32 @@
   </main>
 
   <script>
-  (function SM5_Module(){ // isolate everything
-    const DAYS = 5;
-    const COLUMNS = ["Day","Date","Platform","Content Type","Post Concept","Content Pillar","Call to Action","Primary Hashtags","Link / UTM","Asset","Status","Notes","Best Post Time"];
-    const ORDER = ["Instagram","Facebook","LinkedIn","TikTok","YouTube Shorts","Instagram Stories","Twitter/X","Pinterest"];
+  (function(){
+    const DAYS=5;
+    const COLS=["Day","Date","Platform","Content Type","Post Concept","Content Pillar","Call to Action","Primary Hashtags","Link / UTM","Asset","Status","Notes","Best Post Time"];
+    const ORDER=["Instagram","Facebook","LinkedIn","TikTok","YouTube Shorts","Instagram Stories","Twitter/X","Pinterest"];
 
-    const DEFAULT_TIMES = {"Instagram":"11:00 AM","Instagram Stories":"10:00 AM","Facebook":"12:00 PM","LinkedIn":"9:00 AM","TikTok":"7:30 PM","YouTube Shorts":"6:00 PM","Twitter/X":"1:00 PM","Pinterest":"8:00 PM"};
-    const TIMES = {
-      "Restaurant": {"Instagram":"1:00 PM","Instagram Stories":"11:30 AM","Facebook":"12:30 PM","TikTok":"8:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:00 PM"},
-      "Home Services / Trades": {"Facebook":"6:30 PM","LinkedIn":"8:30 AM","Instagram":"12:00 PM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM"},
-      "Real Estate": {"Instagram":"12:30 PM","Facebook":"1:00 PM","LinkedIn":"8:30 AM","TikTok":"7:30 PM","YouTube Shorts":"6:30 PM"},
-      "Beauty / Salon": {"Instagram":"1:30 PM","Instagram Stories":"10:30 AM","TikTok":"8:30 PM","YouTube Shorts":"7:30 PM","Pinterest":"9:30 PM"},
-      "E-commerce Retail": {"Instagram":"12:00 PM","Facebook":"1:00 PM","TikTok":"9:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:30 PM"},
-      "Professional Services": {"LinkedIn":"8:00 AM","Twitter/X":"12:00 PM","Instagram":"1:00 PM","YouTube Shorts":"6:00 PM"},
-      "Nonprofit / Community": {"Facebook":"12:30 PM","Instagram":"1:00 PM","Instagram Stories":"11:00 AM","TikTok":"8:00 PM"},
-      "Travel & Hospitality": {"Instagram":"11:30 AM","Facebook":"12:00 PM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM","Pinterest":"8:30 PM"},
-      "Healthcare / Wellness": {"Facebook":"12:00 PM","Instagram":"11:30 AM","LinkedIn":"9:00 AM","TikTok":"7:30 PM"},
-      "Education / Coaching": {"LinkedIn":"8:30 AM","Instagram":"12:30 PM","YouTube Shorts":"6:30 PM","TikTok":"8:30 PM"},
-      "Fitness": {"Instagram":"11:30 AM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM","Instagram Stories":"9:30 AM"},
-      "Automotive": {"Facebook":"12:30 PM","Instagram":"1:00 PM","YouTube Shorts":"6:30 PM","TikTok":"8:00 PM"},
-      "Events / Venues": {"Instagram":"12:30 PM","Facebook":"1:00 PM","TikTok":"8:30 PM","Instagram Stories":"10:30 AM"},
-      "Tech / SaaS": {"LinkedIn":"8:30 AM","Twitter/X":"12:30 PM","YouTube Shorts":"6:00 PM"},
-      "Legal Services": {"LinkedIn":"8:30 AM","Facebook":"12:30 PM","Instagram":"1:00 PM"},
-      "Financial Services": {"LinkedIn":"8:30 AM","Twitter/X":"12:30 PM","Instagram":"12:30 PM","YouTube Shorts":"6:30 PM"}
+    const DEFAULT_TIMES={"Instagram":"11:00 AM","Instagram Stories":"10:00 AM","Facebook":"12:00 PM","LinkedIn":"9:00 AM","TikTok":"7:30 PM","YouTube Shorts":"6:00 PM","Twitter/X":"1:00 PM","Pinterest":"8:00 PM"};
+    const TIMES={
+      "Restaurant":{"Instagram":"1:00 PM","Instagram Stories":"11:30 AM","Facebook":"12:30 PM","TikTok":"8:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:00 PM"},
+      "Home Services / Trades":{"Facebook":"6:30 PM","LinkedIn":"8:30 AM","Instagram":"12:00 PM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM"},
+      "Real Estate":{"Instagram":"12:30 PM","Facebook":"1:00 PM","LinkedIn":"8:30 AM","TikTok":"7:30 PM","YouTube Shorts":"6:30 PM"},
+      "Beauty / Salon":{"Instagram":"1:30 PM","Instagram Stories":"10:30 AM","TikTok":"8:30 PM","YouTube Shorts":"7:30 PM","Pinterest":"9:30 PM"},
+      "E-commerce Retail":{"Instagram":"12:00 PM","Facebook":"1:00 PM","TikTok":"9:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:30 PM"},
+      "Professional Services":{"LinkedIn":"8:00 AM","Twitter/X":"12:00 PM","Instagram":"1:00 PM","YouTube Shorts":"6:00 PM"},
+      "Nonprofit / Community":{"Facebook":"12:30 PM","Instagram":"1:00 PM","Instagram Stories":"11:00 AM","TikTok":"8:00 PM"},
+      "Travel & Hospitality":{"Instagram":"11:30 AM","Facebook":"12:00 PM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM","Pinterest":"8:30 PM"},
+      "Healthcare / Wellness":{"Facebook":"12:00 PM","Instagram":"11:30 AM","LinkedIn":"9:00 AM","TikTok":"7:30 PM"},
+      "Education / Coaching":{"LinkedIn":"8:30 AM","Instagram":"12:30 PM","YouTube Shorts":"6:30 PM","TikTok":"8:30 PM"},
+      "Fitness":{"Instagram":"11:30 AM","TikTok":"8:30 PM","YouTube Shorts":"7:00 PM","Instagram Stories":"9:30 AM"},
+      "Automotive":{"Facebook":"12:30 PM","Instagram":"1:00 PM","YouTube Shorts":"6:30 PM","TikTok":"8:00 PM"},
+      "Events / Venues":{"Instagram":"12:30 PM","Facebook":"1:00 PM","TikTok":"8:30 PM","Instagram Stories":"10:30 AM"},
+      "Tech / SaaS":{"LinkedIn":"8:30 AM","Twitter/X":"12:30 PM","YouTube Shorts":"6:00 PM"},
+      "Legal Services":{"LinkedIn":"8:30 AM","Facebook":"12:30 PM","Instagram":"1:00 PM"},
+      "Financial Services":{"LinkedIn":"8:30 AM","Twitter/X":"12:30 PM","Instagram":"12:30 PM","YouTube Shorts":"6:30 PM"}
     };
-    const IDEAS = {
+
+    const IDEAS={
       "Restaurant":[
         {concept:"Chef special spotlight",pillar:"Educational",hashtags:"#LocalEats #ChefSpecial #Foodie",cta:"Reserve a table",platforms:["Instagram","Facebook","TikTok"]},
         {concept:"Happy hour carousel",pillar:"Promotional",hashtags:"#HappyHour #DrinksDeal #AfterWork",cta:"Book now",platforms:["Instagram","Facebook"]},
@@ -205,7 +211,7 @@
       ]
     };
 
-    const PLAYBOOK = {
+    const PLAYBOOK={
       "Restaurant":{personas:["Local foodie","Date‑night planner"],pillars:["Menu","Promos","UGC","BTS"],hooks:["Tonight’s special:","What our chef does differently:","Date night solved:"],ctas:["Reserve","Order online","Call now"],hashtags:["#LocalEats","#ChefSpecial","#Foodie","#DateNight","#SupportLocal"],caption:"Hook ➜ Dish/offer ➜ Social proof ➜ CTA."},
       "Home Services / Trades":{personas:["Homeowner in a hurry","Planner researching pros"],pillars:["Education","Before/After","Testimonials","Promotions"],hooks:["Stop this mistake:","Quick fix for:","What to do first if:"],ctas:["Request a free quote","Save our number","Book inspection"],hashtags:["#HomeFix","#BeforeAfter","#LocalPro","#SafetyFirst","#Maintenance"],caption:"Problem ➜ Quick tip ➜ Proof ➜ CTA (Free quote)."},
       "Real Estate":{personas:["First‑time buyer","Move‑up seller"],pillars:["Listings","Education","Client wins","Neighborhood"],hooks:["This block just got a gem:","3 reasons this layout wins:","Price drop alert:"],ctas:["Book a showing","Get valuation","DM 'LIST'"],hashtags:["#NewListing","#OpenHouse","#MarketUpdate","#DreamHome","#JustSold"],caption:"Hook (address/price) ➜ 3 highlights ➜ Area benefit ➜ CTA."},
@@ -224,70 +230,83 @@
       "Financial Services":{personas:["Starter saver","Wealth builder"],pillars:["Money tips","Client wins","Planning BTS","Promos"],hooks:["Stop doing this with your savings:","2 rules for beginners:","What to do in a dip:"],ctas:["Book intro call","Download checklist","DM 'PLAN'"],hashtags:["#MoneyTips","#Finance101","#Wealth","#Investing","#FinancialPlan"],caption:"Myth ➜ Fact ➜ Simple step ➜ CTA."}
     };
 
-    const $ = id => document.getElementById(id);
-    const fmtDate = (base,add)=>{const d=new Date(); d.setDate(d.getDate()+add); return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'})};
-    const pickPlatform = (idea,i)=> Array.isArray(idea.platforms)&&idea.platforms.length? idea.platforms[i%idea.platforms.length] : ORDER[i%ORDER.length];
-    const slug = s => String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-    const bestTime = (platform,biz)=> (Object.assign({},DEFAULT_TIMES,TIMES[biz]||{}))[platform] || "11:30 AM";
-    const linkUTM = (platform,biz,goal,day,brand)=>{
-      const extra = brand ? `&utm_brand=${encodeURIComponent(brand)}` : '';
-      return `https://example.com?utm_source=${platform.toLowerCase().replace(/\W+/g,'_')}&utm_medium=social&utm_campaign=${slug(biz)}_${slug(goal)}&utm_content=day${day}-${slug(platform)}${extra}`;
-    };
-
-    function planRow(i,date,idea,platform,biz,goal,brand){
-      const map={"Instagram":"Image / Reel","Instagram Stories":"Stories (3-5 slides)","Facebook":"Image / Carousel","LinkedIn":"Carousel / Text Post","TikTok":"Short-form Video","YouTube Shorts":"Short-form Video","Twitter/X":"Text + Image","Pinterest":"Idea Pin"};
-      return {"Day":`Day ${i}`,"Date":date,"Platform":platform,"Content Type":map[platform]||"Post","Post Concept":idea.concept,"Content Pillar":idea.pillar,"Call to Action":idea.cta,"Primary Hashtags":idea.hashtags,"Link / UTM":linkUTM(platform,biz,goal,i,brand),"Asset":"TBD","Status":"Planned","Notes":"","Best Post Time":bestTime(platform,biz)};
-    }
+    const $=id=>document.getElementById(id);
+    const fmt=(add)=>{const d=new Date(); d.setDate(d.getDate()+add); return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'})};
+    const pickPlat=(idea,i)=>Array.isArray(idea.platforms)&&idea.platforms.length?idea.platforms[i%idea.platforms.length]:ORDER[i%ORDER.length];
+    const best=(platform,biz)=>Object.assign({},DEFAULT_TIMES,TIMES[biz]||{})[platform]||"11:30 AM";
+    const slug=s=>String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    const utm=(platform,biz,goal,day,brand)=>`https://example.com?utm_source=${platform.toLowerCase().replace(/\\W+/g,'_')}&utm_medium=social&utm_campaign=${slug(biz)}_${slug(goal)}&utm_content=day${day}-${slug(platform)}${brand?`&utm_brand=${encodeURIComponent(brand)}`:''}`;
 
     function buildRows(){
-      const biz=$('SM5_biz').value, goal=$('SM5_goal').value, tone=$('SM5_tone').value, brand=($('SM5_brand').value||'').trim();
-      const ideas = IDEAS[biz] || IDEAS["Professional Services"];
-      const rows = [];
+      const biz=$('biz').value, goal=$('goal').value, tone=$('tone').value, brand=($('brand').value||'').trim();
+      const ideas=IDEAS[biz]||IDEAS["Professional Services"];
+      const rows=[];
       for(let d=1; d<=DAYS; d++){
         const idea=ideas[(d-1)%ideas.length];
-        const platform=pickPlatform(idea,d-1);
-        const date=fmtDate(new Date(),d-1);
-        rows.push(planRow(d,date,idea,platform,biz,goal,brand));
+        const platform=pickPlat(idea,d-1);
+        rows.push({
+          "Day":`Day ${d}`,
+          "Date":fmt(d-1),
+          "Platform":platform,
+          "Content Type":({"Instagram":"Image / Reel","Instagram Stories":"Stories (3-5 slides)","Facebook":"Image / Carousel","LinkedIn":"Carousel / Text Post","TikTok":"Short-form Video","YouTube Shorts":"Short-form Video","Twitter/X":"Text + Image","Pinterest":"Idea Pin"})[platform]||"Post",
+          "Post Concept":idea.concept,
+          "Content Pillar":idea.pillar,
+          "Call to Action":idea.cta,
+          "Primary Hashtags":idea.hashtags,
+          "Link / UTM":utm(platform,biz,goal,d,brand),
+          "Asset":"TBD",
+          "Status":"Planned",
+          "Notes":"",
+          "Best Post Time":best(platform,biz)
+        });
       }
-      $('SM5_diag').textContent = `Brand: ${brand||'(none)'} | Business Type: ${biz} | Goal: ${goal} | Tone: ${tone} | Days: ${DAYS}`;
+      $('diag').textContent=`Brand: ${brand||'(none)'} | Business: ${biz} | Goal: ${goal} | Tone: ${tone}`;
       return rows;
     }
 
     function renderTable(rows){
-      const table=$('SM5_table');
-      const thead='<thead><tr>'+COLUMNS.map(c=>`<th>${c}</th>`).join('')+'</tr></thead>';
-      const body = rows.map(r=>'<tr>'+COLUMNS.map(c=>`<td>${r[c]??''}</td>`).join('')+'</tr>').join('');
-      table.innerHTML = thead + '<tbody>' + body + '</tbody>';
+      const thead='<thead><tr>'+COLS.map(c=>`<th>${c}</th>`).join('')+'</tr></thead>';
+      const body=rows.map(r=>'<tr>'+COLS.map(c=>`<td>${r[c]??''}</td>`).join('')+'</tr>').join('');
+      $('table').innerHTML=thead+'<tbody>'+body+'</tbody>';
     }
 
     function toCSV(rows){
       const esc=v=>'"'+String(v).replaceAll('"','""')+'"';
-      const header=COLUMNS.join(',');
-      const body=rows.map(r=>COLUMNS.map(c=>esc(r[c]??'')).join(',')).join('\n');
-      return header+'\n'+body;
+      const head=COLS.join(',');
+      const body=rows.map(r=>COLS.map(c=>esc(r[c]??'')).join(',')).join('\\n');
+      return head+'\\n'+body;
     }
 
-    function xCell(v){const s=String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); return `<Cell><Data ss:Type="String">${s}</Data></Cell>`;}
-    function xRow(arr){return `<Row>${arr.map(xCell).join('')}</Row>`;}
+    // Excel 2003 XML (no libraries)
+    const xCell=v=>`<Cell><Data ss:Type="String">${String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</Data></Cell>`;
+    const xRow=arr=>`<Row>${arr.map(xCell).join('')}</Row>`;
 
-    function buildXLS(rows,biz,tone,goal,brand){
-      const top = brand ? `Brand: ${brand} | ` : '';
-      const plan = xRow([`${top}Business Type: ${biz} | Goal: ${goal} | Tone: ${tone}`]) + xRow(COLUMNS) + rows.map(r=>xRow(COLUMNS.map(c=>r[c]||''))).join('');
-      const ideas = IDEAS[biz] || [];
+    function buildWorkbookXML(rows,biz,tone,goal,brand){
+      const header = xRow(COLS);
+      const plan = header + rows.map(r=>xRow(COLS.map(c=>r[c]??''))).join('');
+
+      const ideas=IDEAS[biz]||[];
       const kw = xRow(['Concept','Pillar','Hashtags']) + ideas.map(i=>xRow([i.concept,i.pillar,i.hashtags])).join('');
-      const times = Object.assign({},DEFAULT_TIMES,TIMES[biz]||{});
+
+      const times=Object.assign({},DEFAULT_TIMES,TIMES[biz]||{});
       const bpt = xRow(['Platform','Best Post Time']) + Object.keys(times).map(p=>xRow([p,times[p]])).join('');
+
       const acct = xRow(['Platform','Handle','URL','Notes']);
-      const p = PLAYBOOK[biz] || PLAYBOOK["Professional Services"];
-      const pb = [
-        xRow([`Playbook for: ${biz}`]), xRow([`Goal: ${goal} | Tone: ${tone}`]), xRow(['']),
-        xRow(['Personas']), ...p.personas.map(v=>xRow([v])), xRow(['']),
-        xRow(['Pillars']), xRow([p.pillars.join(' • ')]), xRow(['']),
-        xRow(['Hooks']), ...p.hooks.map(v=>xRow([v])), xRow(['']),
-        xRow(['CTAs']), xRow([p.ctas.join(' • ')]), xRow(['']),
-        xRow(['Default Hashtags']), xRow([p.hashtags.join(' ')]), xRow(['']),
-        xRow(['Caption Framework']), xRow([p.caption])
-      ].join('');
+
+      const pb = (()=>{
+        const p=PLAYBOOK[biz]||PLAYBOOK["Professional Services"];
+        return [
+          xRow([`Playbook for: ${biz}`]),
+          xRow([`Goal: ${goal} | Tone: ${tone}`]),
+          xRow(['']),
+          xRow(['Audience Personas']), ...p.personas.map(x=>xRow([x])), xRow(['']),
+          xRow(['Content Pillars']), xRow([p.pillars.join(' • ')]), xRow(['']),
+          xRow(['Hook Starters']), ...p.hooks.map(x=>xRow([x])), xRow([''])),
+          xRow(['CTA Examples']), xRow([p.ctas.join(' • ')]), xRow(['']),
+          xRow(['Default Hashtags']), xRow([p.hashtags.join(' ')]), xRow(['']),
+          xRow(['Caption Framework']), xRow([p.caption])
+        ].join('');
+      })();
 
       return `<?xml version="1.0"?>
 <?mso-application progid="Excel.Sheet"?>
@@ -304,23 +323,23 @@
 </Workbook>`;
     }
 
-    function dl(name, content, type){
+    function dl(name,content,type){
       const a=document.createElement('a');
       a.href=URL.createObjectURL(new Blob([content],{type}));
       a.download=name; document.body.appendChild(a); a.click(); a.remove();
     }
 
     function refresh(){
-      const rows = buildRows();
+      const rows=buildRows();
       renderTable(rows);
-      $('SM5_csv').onclick = ()=> dl('5Day.csv', toCSV(rows), 'text/csv');
-      const brand=($('SM5_brand').value||'').trim(), biz=$('SM5_biz').value, goal=$('SM5_goal').value, tone=$('SM5_tone').value;
-      const sf = s => String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-      $('SM5_xls').onclick = ()=> dl('5Day_'+sf(brand||'brand')+'_'+sf(biz)+'_'+sf(goal)+'.xls', buildXLS(rows,biz,tone,goal,brand), 'application/vnd.ms-excel');
+      $('csv').onclick=()=>dl('5Day.csv',toCSV(rows),'text/csv');
+      const brand=($('brand').value||'').trim(), biz=$('biz').value, goal=$('goal').value, tone=$('tone').value;
+      const fname=`5Day_${slug(brand||'brand')}_${slug(biz)}_${slug(goal)}.xls`;
+      $('xls').onclick=()=>dl(fname, buildWorkbookXML(rows,biz,tone,goal,brand),'application/vnd.ms-excel');
     }
 
-    $('SM5_go').addEventListener('click', refresh);
-    refresh(); // initial render
+    $('go').addEventListener('click', refresh);
+    refresh();
   })();
   </script>
 </body>
