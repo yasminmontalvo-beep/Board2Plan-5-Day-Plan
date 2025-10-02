@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SafeMode 30‑Day Planner (GitHub‑ready)</title>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <style>
+    :root{--teal:#0ea5a5;--ink:#111;--line:#e6eaee;--soft:#f6f8f9}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink)}
+    header{background:#fff;border-bottom:1px solid var(--line)}
+    .wrap{max-width:1024px;margin:0 auto;padding:16px}
+    h1{font-size:22px;margin:0}
+    .sub{font-size:12px;color:#666}
+    .panel{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--soft);margin-top:12px}
+    .grid{display:grid;gap:12px}
+    .cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    button, .btn{padding:10px 12px;border:1px solid var(--line);border-radius:999px;cursor:pointer;background:#3b82f6;color:#fff;font-weight:600;text-decoration:none;display:inline-block}
+    .ghost{background:#fff;color:#222}
+    table{width:100%;border-collapse:separate;border-spacing:0;margin-top:8px}
+    th{ text-align:left;padding:8px;border-bottom:2px solid var(--line);font-size:12px;color:#444}
+    td{ padding:8px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}
+    .diag{background:#fff5c7;border:1px solid #f1d48f;border-radius:10px;padding:10px;font-size:12px;color:#5b4b00;margin-top:10px}
+    footer{margin:24px 0;color:#666;font-size:12px}
+    @media (max-width:900px){.cols-4{grid-template-columns:1fr 1fr}}
+    @media (max-width:600px){.cols-4{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>SafeMode 30‑Day Planner (GitHub‑ready)</h1>
+      <div class="sub">Standalone • Shopify + Email wired • Zero unwanted branding</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel">
+      <div class="grid cols-4">
+        <label>Brand (optional)<br><input id="GHP30_brand" placeholder="e.g., Acme Realty"></label>
+        <label>Business Type<br>
+          <select id="GHP30_biz">
+            <option>Restaurant</option>
+            <option>Real Estate</option>
+            <option>Professional Services</option>
+          </select>
+        </label>
+        <label>Goal<br>
+          <select id="GHP30_goal">
+            <option>Lead Generation</option>
+            <option>Engagement</option>
+            <option>Awareness</option>
+            <option>Sales</option>
+          </select>
+        </label>
+        <label>Tone<br>
+          <select id="GHP30_tone">
+            <option>Educational</option>
+            <option>Promotional</option>
+            <option>Community</option>
+            <option>Behind the Scenes</option>
+            <option>Trend-Driven</option>
+          </select>
+        </label>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button id="GHP30_go">Generate</button>
+        <button id="GHP30_csv" class="ghost">Export CSV</button>
+        <button id="GHP30_xls" class="ghost">Download Workbook (.xls)</button>
+        <a class="btn" style="background:#22c55e;border:none" href="https://tuuswc-ne.myshopify.com/" target="_blank" rel="noopener">🛒 Buy on Shopify</a>
+      </div>
+      <div id="GHP30_diag" class="diag" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="panel">
+      <table id="GHP30_table"></table>
+    </section>
+
+    <footer>
+      Need help? <a href="mailto:Yasmin.Montalvo@Gmail.com">Yasmin.Montalvo@Gmail.com</a>
+    </footer>
+  </main>
+
+  <script>
+  (function GHP30Module(){ // isolate
+    const DAYS = 30;
+    const COLUMNS = ["Day","Date","Platform","Content Type","Post Concept","Content Pillar","Call to Action","Primary Hashtags","Link / UTM","Asset","Status","Notes","Best Post Time"];
+    const ORDER = ["Instagram","Facebook","LinkedIn","TikTok","YouTube Shorts","Instagram Stories","Twitter/X","Pinterest"];
+
+    const DEFAULT_TIMES = {"Instagram":"11:00 AM","Instagram Stories":"10:00 AM","Facebook":"12:00 PM","LinkedIn":"9:00 AM","TikTok":"7:30 PM","YouTube Shorts":"6:00 PM","Twitter/X":"1:00 PM","Pinterest":"8:00 PM"};
+    const TIMES = {
+      "Restaurant": {"Instagram":"1:00 PM","Instagram Stories":"11:30 AM","Facebook":"12:30 PM","TikTok":"8:00 PM","YouTube Shorts":"7:00 PM","Pinterest":"9:00 PM"},
+      "Real Estate": {"Instagram":"12:30 PM","Facebook":"1:00 PM","LinkedIn":"8:30 AM","TikTok":"7:30 PM","YouTube Shorts":"6:30 PM"},
+      "Professional Services": {"LinkedIn":"8:00 AM","Twitter/X":"12:00 PM","Instagram":"1:00 PM","YouTube Shorts":"6:00 PM"}
+    };
+    const IDEAS = {
+      "Restaurant":[
+        {concept:"Chef special spotlight",pillar:"Educational",hashtags:"#LocalEats #ChefSpecial #Foodie",cta:"Reserve a table",platforms:["Instagram","Facebook","TikTok"]},
+        {concept:"Happy hour carousel",pillar:"Promotional",hashtags:"#HappyHour #DrinksDeal #AfterWork",cta:"Book now",platforms:["Instagram","Facebook"]},
+        {concept:"Prep time‑lapse",pillar:"Behind the Scenes",hashtags:"#KitchenLife #MadeFresh #BTS",cta:"See today’s menu",platforms:["TikTok","Instagram"]},
+        {concept:"Review quote graphic",pillar:"Community",hashtags:"#CustomerLove #ThankYou #5Stars",cta:"Leave a review",platforms:["Instagram","Facebook"]},
+        {concept:"Limited menu countdown",pillar:"Trend-Driven",hashtags:"#LimitedTime #FoodLaunch #Countdown",cta:"Order online",platforms:["Instagram Stories","Facebook"]}
+      ],
+      "Real Estate":[
+        {concept:"New listing carousel",pillar:"Promotional",hashtags:"#NewListing #OpenHouse #DreamHome",cta:"Book a showing",platforms:["Instagram","Facebook","LinkedIn"]},
+        {concept:"Market update chart",pillar:"Educational",hashtags:"#MarketUpdate #RealEstateTips #LocalStats",cta:"Get your home value",platforms:["LinkedIn","Facebook"]},
+        {concept:"Client success story",pillar:"Community",hashtags:"#Sold #JustClosed #HappyHome",cta:"Start your search",platforms:["Instagram","Facebook"]},
+        {concept:"Neighborhood guide",pillar:"Educational",hashtags:"#NeighborhoodGuide #LocalLove #Relocation",cta:"Download the guide",platforms:["Instagram","LinkedIn"]},
+        {concept:"Open house reel",pillar:"Promotional",hashtags:"#OpenHouse #TourToday #RealEstate",cta:"RSVP for the tour",platforms:["Instagram","Facebook"]}
+      ],
+      "Professional Services":[
+        {concept:"3‑step framework carousel",pillar:"Frameworks",hashtags:"#Framework #B2B #Operations",cta:"Book a consult",platforms:["LinkedIn","Instagram"]},
+        {concept:"Case study metric",pillar:"Case studies",hashtags:"#CaseStudy #ROI #Outcome",cta:"See case study",platforms:["LinkedIn","Twitter/X"]},
+        {concept:"Free audit promo",pillar:"Promotions",hashtags:"#Audit #FreeCheck #Consulting",cta:"DM 'AUDIT'",platforms:["LinkedIn","Instagram"]},
+        {concept:"Founder POV tip (30s)",pillar:"Education",hashtags:"#Leadership #Ops #Clarity",cta:"Download checklist",platforms:["LinkedIn","YouTube Shorts"]},
+        {concept:"Client testimonial clip",pillar:"Testimonials",hashtags:"#HappyClient #Results #Trust",cta:"Book a consult",platforms:["Instagram","LinkedIn"]}
+      ]
+    };
+    const PLAYBOOK = {
+      "Restaurant":{personas:["Local foodie","Date‑night planner"],pillars:["Menu","Promos","UGC","BTS"],hooks:["Tonight’s special:","What our chef does differently:","Date night solved:"],ctas:["Reserve","Order online","Call now"],hashtags:["#LocalEats","#ChefSpecial","#Foodie","#DateNight","#SupportLocal"],caption:"Hook ➜ Dish/offer ➜ Social proof ➜ CTA."},
+      "Real Estate":{personas:["First‑time buyer","Move‑up seller"],pillars:["Listings","Education","Client wins","Neighborhood"],hooks:["3 reasons this layout wins:","Price drop alert:","This block just got a gem:"],ctas:["Book a showing","Get valuation","DM 'LIST'"],hashtags:["#NewListing","#OpenHouse","#MarketUpdate","#DreamHome","#JustSold"],caption:"Hook (address/price) ➜ 3 highlights ➜ Area benefit ➜ CTA."},
+      "Professional Services":{personas:["Decision‑maker","Researcher"],pillars:["Frameworks","Case studies","Testimonials","Promos"],hooks:["We cut cost by 27% using:","3‑step play to fix:","Stop doing this in Q4:"],ctas:["Book consult","Download checklist","DM 'AUDIT'"],hashtags:["#CaseStudy","#Framework","#B2B","#Consulting","#ROI"],caption:"Problem ➜ Approach ➜ Result metric ➜ CTA."}
+    };
+
+    const $ = id => document.getElementById(id);
+    const fmtDate = (base,add)=>{const d=new Date(); d.setDate(d.getDate()+add); return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'})};
+    const pickPlatform = (idea,i)=> Array.isArray(idea.platforms)&&idea.platforms.length? idea.platforms[i%idea.platforms.length] : ORDER[i%ORDER.length];
+    const slug = s => String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    const bestTime = (platform,biz)=> (Object.assign({},DEFAULT_TIMES,TIMES[biz]||{}))[platform] || "11:30 AM";
+    const linkUTM = (platform,biz,goal,day,brand)=>{
+      const extra = brand ? `&utm_brand=${encodeURIComponent(brand)}` : '';
+      return `https://example.com?utm_source=${platform.toLowerCase().replace(/\W+/g,'_')}&utm_medium=social&utm_campaign=${slug(biz)}_${slug(goal)}&utm_content=day${day}-${slug(platform)}${extra}`;
+    };
+
+    function planRow(i,date,idea,platform,biz,goal,brand){
+      const map={"Instagram":"Image / Reel","Instagram Stories":"Stories (3-5 slides)","Facebook":"Image / Carousel","LinkedIn":"Carousel / Text Post","TikTok":"Short-form Video","YouTube Shorts":"Short-form Video","Twitter/X":"Text + Image","Pinterest":"Idea Pin"};
+      return {"Day":`Day ${i}`,"Date":date,"Platform":platform,"Content Type":map[platform]||"Post","Post Concept":idea.concept,"Content Pillar":idea.pillar,"Call to Action":idea.cta,"Primary Hashtags":idea.hashtags,"Link / UTM":linkUTM(platform,biz,goal,i,brand),"Asset":"TBD","Status":"Planned","Notes":"","Best Post Time":bestTime(platform,biz)};
+    }
+
+    function buildRows(){
+      const biz=$('GHP30_biz').value, goal=$('GHP30_goal').value, tone=$('GHP30_tone').value, brand=($('GHP30_brand').value||'').trim();
+      const ideas = IDEAS[biz] || IDEAS["Professional Services"];
+      const rows = [];
+      for(let d=1; d<=DAYS; d++){
+        const idea=ideas[(d-1)%ideas.length];
+        const platform=pickPlatform(idea,d-1);
+        const date=fmtDate(new Date(),d-1);
+        rows.push(planRow(d,date,idea,platform,biz,goal,brand));
+      }
+      $('GHP30_diag').textContent = `Brand: ${brand||'(none)'} | Business Type: ${biz} | Goal: ${goal} | Tone: ${tone} | Days: ${DAYS}`;
+      return rows;
+    }
+
+    function renderTable(rows){
+      const table=$('GHP30_table');
+      const thead='<thead><tr>'+COLUMNS.map(c=>`<th>${c}</th>`).join('')+'</tr></thead>';
+      const body = rows.map(r=>'<tr>'+COLUMNS.map(c=>`<td>${r[c]??''}</td>`).join('')+'</tr>').join('');
+      table.innerHTML = thead + '<tbody>' + body + '</tbody>';
+    }
+
+    function toCSV(rows){
+      const esc=v=>'"'+String(v).replaceAll('"','""')+'"';
+      const header=COLUMNS.join(',');
+      const body=rows.map(r=>COLUMNS.map(c=>esc(r[c]??'')).join(',')).join('\n');
+      return header+'\n'+body;
+    }
+
+    function xCell(v){const s=String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); return `<Cell><Data ss:Type="String">${s}</Data></Cell>`;}
+    function xRow(arr){return `<Row>${arr.map(xCell).join('')}</Row>`;}
+    function buildXLS(rows,biz,tone,goal,brand){
+      const top = brand ? `Brand: ${brand} | ` : '';
+      const plan = xRow([`${top}Business Type: ${biz} | Goal: ${goal} | Tone: ${tone}`]) + xRow(COLUMNS) + rows.map(r=>xRow(COLUMNS.map(c=>r[c]||''))).join('');
+      const ideas = IDEAS[biz] || [];
+      const kw = xRow(['Concept','Pillar','Hashtags']) + ideas.map(i=>xRow([i.concept,i.pillar,i.hashtags])).join('');
+      const times = Object.assign({},DEFAULT_TIMES,TIMES[biz]||{});
+      const bpt = xRow(['Platform','Best Post Time']) + Object.keys(times).map(p=>xRow([p,times[p]])).join('');
+      const acct = xRow(['Platform','Handle','URL','Notes']);
+      const p = PLAYBOOK[biz] || PLAYBOOK["Professional Services"];
+      const pb = [
+        xRow([`Playbook for: ${biz}`]), xRow([`Goal: ${goal} | Tone: ${tone}`]), xRow(['']),
+        xRow(['Personas']), ...p.personas.map(v=>xRow([v])), xRow(['']),
+        xRow(['Pillars']), xRow([p.pillars.join(' • ')]), xRow(['']),
+        xRow(['Hooks']), ...p.hooks.map(v=>xRow([v])), xRow(['']),
+        xRow(['CTAs']), xRow([p.ctas.join(' • ')]), xRow(['']),
+        xRow(['Default Hashtags']), xRow([p.hashtags.join(' ')]), xRow(['']),
+        xRow(['Caption Framework']), xRow([p.caption])
+      ].join('');
+
+      return `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+  <Worksheet ss:Name="30-Day Plan"><Table>${plan}</Table></Worksheet>
+  <Worksheet ss:Name="Keywords & Hashtags"><Table>${kw}</Table></Worksheet>
+  <Worksheet ss:Name="Analytics"><Table>${xRow(['Date','Platform','Post URL','Impressions','Reach','Engagements','Saves','Clicks','Notes'])}</Table></Worksheet>
+  <Worksheet ss:Name="Best Post Times"><Table>${bpt}</Table></Worksheet>
+  <Worksheet ss:Name="Accounts"><Table>${acct}</Table></Worksheet>
+  <Worksheet ss:Name="Playbook"><Table>${pb}</Table></Worksheet>
+</Workbook>`;
+    }
+
+    function dl(name, content, type){
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([content],{type}));
+      a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    }
+
+    function refresh(){
+      const rows = buildRows();
+      renderTable(rows);
+      $('GHP30_csv').onclick = ()=> dl('30Day.csv', toCSV(rows), 'text/csv');
+      const brand=($('GHP30_brand').value||'').trim(), biz=$('GHP30_biz').value, goal=$('GHP30_goal').value, tone=$('GHP30_tone').value;
+      const sf = s => String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+      $('GHP30_xls').onclick = ()=> dl('30Day_'+sf(brand||'brand')+'_'+sf(biz)+'_'+sf(goal)+'.xls', buildXLS(rows,biz,tone,goal,brand), 'application/vnd.ms-excel');
+    }
+
+    $('GHP30_go').addEventListener('click', refresh);
+    refresh(); // initial render
+  })();
+  </script>
+</body>
+</html>
