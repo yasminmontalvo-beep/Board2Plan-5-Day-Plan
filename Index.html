@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>5‑Day Marketing Plan (SafeMode – 16 Industries + Playbook)</title>
+  <title>5‑Day Marketing Plan — 16 Industries + Playbook (Option B)</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -33,7 +33,7 @@
   <header>
     <div class="wrap">
       <h1>5‑Day Marketing Plan</h1>
-      <div class="sub">Standalone (no libraries) • CSV + multi‑sheet XLS export • 16 industries • Playbook included</div>
+      <div class="sub">Self‑contained (no external libraries) • CSV + multi‑sheet XLS • 16 industries • Playbook included</div>
     </div>
   </header>
 
@@ -293,20 +293,18 @@
 
       const acct = xRow(['Platform','Handle','URL','Notes']);
 
-      const pb = (()=>{
-        const p=PLAYBOOK[biz]||PLAYBOOK["Professional Services"];
-        return [
-          xRow([`Playbook for: ${biz}`]),
-          xRow([`Goal: ${goal} | Tone: ${tone}`]),
-          xRow(['']),
-          xRow(['Audience Personas']), ...p.personas.map(x=>xRow([x])), xRow(['']),
-          xRow(['Content Pillars']), xRow([p.pillars.join(' • ')]), xRow(['']),
-          xRow(['Hook Starters']), ...p.hooks.map(x=>xRow([x])), xRow(['']),
-          xRow(['CTA Examples']), xRow([p.ctas.join(' • ')]), xRow(['']),
-          xRow(['Default Hashtags']), xRow([p.hashtags.join(' ')]), xRow(['']),
-          xRow(['Caption Framework']), xRow([p.caption])
-        ].join('');
-      })();
+      const p=PLAYBOOK[biz]||PLAYBOOK["Professional Services"];
+      const pb = [
+        xRow([`Playbook for: ${biz}`]),
+        xRow([`Goal: ${goal} | Tone: ${tone}`]),
+        xRow(['']),
+        xRow(['Audience Personas']), ...p.personas.map(x=>xRow([x])), xRow(['']),
+        xRow(['Content Pillars']), xRow([p.pillars.join(' • ')]), xRow(['']),
+        xRow(['Hook Starters']), ...p.hooks.map(x=>xRow([x])), xRow(['']),
+        xRow(['CTA Examples']), xRow([p.ctas.join(' • ')]), xRow(['']),
+        xRow(['Default Hashtags']), xRow([p.hashtags.join(' ')]), xRow(['']),
+        xRow(['Caption Framework']), xRow([p.caption])
+      ].join('');
 
       return `<?xml version="1.0"?>
 <?mso-application progid="Excel.Sheet"?>
@@ -334,7 +332,7 @@
       renderTable(rows);
       $('csv').onclick=()=>dl('5Day.csv',toCSV(rows),'text/csv');
       const brand=($('brand').value||'').trim(), biz=$('biz').value, goal=$('goal').value, tone=$('tone').value;
-      const fname=`5Day_${slug(brand||'brand')}_${slug(biz)}_${slug(goal)}.xls`;
+      const fname=`5Day_${(brand||'brand').toLowerCase().replace(/[^a-z0-9]+/g,'-')}_${biz.toLowerCase().replace(/[^a-z0-9]+/g,'-')}_${goal.toLowerCase().replace(/[^a-z0-9]+/g,'-')}.xls`;
       $('xls').onclick=()=>dl(fname, buildWorkbookXML(rows,biz,tone,goal,brand),'application/vnd.ms-excel');
     }
 
